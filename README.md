@@ -18,20 +18,20 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 
 ## Getting Started
 
-### Automated Integration
+### Automated Installation
 
 Run in your repository's root directory with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
-claude "https://github.com/convcha/machiners-platoon Read this URL's README and integrate these GitHub Actions into my project."
+claude "https://github.com/convcha/machiners-platoon Read this URL's README and install these GitHub Actions into my project."
 ```
 
 For busy developers (skip permission prompts - use at your own risk):
 ```bash
-claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this URL's README and integrate these GitHub Actions into my project."
+claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this URL's README and install these GitHub Actions into my project."
 ```
 
-### Manual Integration
+### Manual Installation
 
 1. **Copy workflow files** to your repository's `.github/workflows/`:
    - `.github/workflows/product-manager-bot.yml`
