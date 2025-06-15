@@ -49,7 +49,7 @@ This document provides detailed information about the Machiners Platoon architec
 - Creates feature branches automatically (`feature/issue-{number}`)
 - Implements features according to architectural plans
 - Follows project coding conventions and patterns
-- Runs comprehensive validation (lint, format, typecheck)
+- Runs comprehensive validation (e.g. lint, format and typecheck)
 - Creates pull requests with detailed descriptions including issue links
 - Updates original issues with PR links
 - Automatically triggers Architect Review Bot
@@ -57,7 +57,7 @@ This document provides detailed information about the Machiners Platoon architec
 **Implementation Process:**
 1. Creates dedicated feature branch
 2. Implements code following existing patterns
-3. Runs project-specific validation commands
+3. Runs project-specific validation (e.g. lint, format and typecheck) commands
 4. Creates detailed PR with implementation summary
 5. Links PR to original issue
 6. Triggers automated review process
@@ -91,7 +91,7 @@ This document provides detailed information about the Machiners Platoon architec
 - Addresses review feedback systematically
 - Implements requested fixes and improvements
 - Maintains code quality throughout fixes
-- Runs comprehensive validation after fixes
+- Runs comprehensive validation (e.g. lint, format and typecheck) after fixes
 - **Review Cycle Protection**: Respects maximum cycle limits
 - Automatically triggers re-review by Architect Bot
 
@@ -99,7 +99,7 @@ This document provides detailed information about the Machiners Platoon architec
 1. Analyzes review feedback
 2. Implements requested changes
 3. Maintains coding standards
-4. Re-runs validation suite
+4. Re-runs validation suite (e.g. lint, format and typecheck)
 5. Triggers automated re-review
 
 ## 🔄 Detailed Development Workflow
@@ -181,7 +181,7 @@ The Machiners Platoon operates via sophisticated repository dispatch events:
 - ✅ Create detailed technical architecture plans
 - ✅ Implement code following existing patterns and conventions
 - ✅ Create and manage Git branches automatically
-- ✅ Run comprehensive validation (lint, format, typecheck)
+- ✅ Run comprehensive validation (e.g. lint, format and typecheck)
 - ✅ Create and update pull requests with proper linking
 - ✅ Provide detailed code reviews with cycle tracking
 - ✅ Address review feedback systematically

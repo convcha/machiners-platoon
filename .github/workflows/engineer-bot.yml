@@ -72,7 +72,7 @@ jobs:
             2. Implement the feature according to the architectural plan
             3. Follow existing code patterns and conventions
             4. Write tests for new functionality
-            5. Ensure code quality and validation (e.g. Full lint, format, and typecheck)
+            5. Ensure code quality and validation (e.g. lint, format and typecheck)
             6. Create a pull request using mcp__github__create_pull_request with detailed description that includes an "## Issues" section at the top of the PR body with a link to the corresponding issue
             7. After creating the PR, update the corresponding issue to add a "## Pull Requests" section at the top of the issue body with a link to the created PR
             8. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
@@ -93,12 +93,11 @@ jobs:
             1. Create a new branch: `git checkout -b feature/issue-{issue-number}`
             2. Implement the feature step by step
             3. Test the implementation
-            4. Run `pnpm install` before committing changes
-            5. Run your validation command to ensure format and lint pass
-            6. Stage all files with `git add .` before committing
-            7. Commit changes with descriptive messages
-            8. Push the branch
-            9. Create a pull request using mcp__github__create_pull_request
+            4. Run your validation command (e.g. lint, format and typecheck) to ensure format and lint pass
+            5. Stage all files with `git add .` before committing
+            6. Commit changes with descriptive messages
+            7. Push the branch
+            8. Create a pull request using mcp__github__create_pull_request
 
             Always ensure:
             - Code follows existing patterns and conventions
@@ -106,7 +105,7 @@ jobs:
             - No linting errors
             - Proper error handling
             - Quality standards are maintained
-            - Validation (e.g. Full lint, format, and typecheck) passes completely
+            - Validation (e.g. lint, format and typecheck) passes completely
           direct_prompt: |
             YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
             
@@ -116,14 +115,14 @@ jobs:
             3. Follow existing code patterns and conventions
             5. Write appropriate tests
             6. Ensure code quality standards are met
-            7. **IMPORTANT: After implementation is complete, run validation (e.g. Full lint, format, and typecheck) to ensure quality standards are met**
+            7. **IMPORTANT: After implementation is complete, run validation (e.g. lint, format and typecheck) to ensure quality standards are met**
             8. Create a pull request using mcp__github__create_pull_request with a detailed description of the implementation that includes an "## Issues" section at the very top of the PR body with a link to the corresponding issue
             9. **IMPORTANT: After creating the PR, update the corresponding issue by adding a "## Pull Requests" section at the very top of the issue body with a link to the created PR using mcp__github__update_issue**
             10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
 
             Make sure to read the architectural plan and requirements carefully before starting implementation.
 
-            **CRITICAL: Before creating the pull request, you MUST run validation (e.g. Full lint, format, and typecheck) and ensure all quality checks pass.**
+            **CRITICAL: Before creating the pull request, you MUST run validation (e.g. lint, format and typecheck) and ensure all quality checks pass.**
 
             After creating the pull request and updating the issue with the PR link, ensure it is ready for architectural review.
 

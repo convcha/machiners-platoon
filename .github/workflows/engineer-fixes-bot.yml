@@ -157,14 +157,14 @@ jobs:
             2. Prioritize required changes vs suggestions
             3. Implement fixes systematically
             4. Test each change
-            5. **IMPORTANT: After all fixes are complete, run validation (e.g. Full lint, format, and typecheck) to ensure quality standards are met**
+            5. **IMPORTANT: After all fixes are complete, run validation (e.g. lint, format and typecheck) to ensure quality standards are met**
             6. Stage all files with `git add .` before committing
             7. Commit changes with descriptive messages referencing the feedback
             8. Respond to review comments explaining the fixes made
 
             Quality checks after fixes:
             - All tests pass
-            - **MANDATORY: Code validation (e.g. Full lint, format, and typecheck) passes and meets quality standards**
+            - **MANDATORY: Code validation (e.g. lint, format and typecheck) passes and meets quality standards**
             - Code follows existing patterns and conventions
             - Performance is maintained or improved
             - Stage all files with `git add .` before committing
@@ -175,15 +175,15 @@ jobs:
             1. Read all the review comments and feedback carefully
             2. Implement the necessary fixes and improvements
             3. Address each piece of feedback systematically
-            4. **CRITICAL: After all fixes are implemented, run validation (e.g. Full lint, format, and typecheck) to ensure quality standards are met**
-            5. Ensure validation (e.g. Full lint, format, and typecheck) is successful
+            4. **CRITICAL: After all fixes are implemented, run validation (e.g. lint, format and typecheck) to ensure quality standards are met**
+            5. Ensure validation (e.g. lint, format and typecheck) is successful
             6. Update the pull request with the fixes
             7. Respond to review comments explaining what was fixed
             8. After completing fixes, ensure the changes are ready for re-review
             9. IMPORTANT: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
             10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
 
-            **MANDATORY: You MUST run validation (e.g. Full lint, format, and typecheck) before considering the fixes complete. All quality checks must pass.**
+            **MANDATORY: You MUST run validation (e.g. lint, format and typecheck) before considering the fixes complete. All quality checks must pass.**
 
             Focus on addressing the architectural and code quality concerns while maintaining the overall implementation integrity.
 
