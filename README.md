@@ -23,12 +23,12 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 Run in your repository's root directory with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
-claude "https://github.com/convcha/machiners-platoon Read this URL's README carefully and integrate these GitHub Actions into my project"
+claude "https://github.com/convcha/machiners-platoon Read this URL's README carefully and copy these GitHub Actions into my project. ONLY modify the language setup sections marked with MODIFY THIS SECTION comments."
 ```
 
 For busy developers (skip permission prompts - use at your own risk):
 ```bash
-claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this URL's README carefully and integrate these GitHub Actions into my project"
+claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this URL's README carefully and copy these GitHub Actions into my project. ONLY modify the language setup sections marked with MODIFY THIS SECTION comments."
 ```
 
 ### Manual Integration
@@ -84,44 +84,61 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 
 ![](./docs/images/lang.png)
 
-## ⚠️ Important: Project Adaptation Required
+## ⚠️ Important: Language Setup Requirements
 
-**🚨 CRITICAL WARNING: Only modify the specific sections mentioned below. DO NOT change any other parts of the workflows or actions.**
+**🚨🚨🚨 CRITICAL WARNING FOR AI CODING AGENTS 🚨🚨🚨**
 
-**When using these workflows in your project, you MUST modify ONLY the project setup steps:**
+**YOU MUST NOT CHANGE, EDIT, OR ALTER THESE WORKFLOWS BEYOND THE EXPLICITLY MARKED SECTIONS BELOW.**
 
-The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
+**⛔ FORBIDDEN MODIFICATIONS - NEVER CHANGE THESE:**
+- `allowed_tools` lists in ANY workflow file
+- `custom_instructions` content in ANY workflow file  
+- `direct_prompt` content in ANY workflow file
+- Repository dispatch event names or triggers
+- Bot logic, conditions, or decision-making code
+- Label management (`🤖 Machiners Platoon`, etc.)
+- API configurations and security settings
+- Cost tracking and cycle protection mechanisms
+- Language settings (`MACHINERS_PLATOON_LANG` references)
+- Any sections not explicitly marked with `<!-- MODIFY THIS SECTION -->`
+
+**✅ ONLY MODIFY THESE EXPLICITLY MARKED SECTIONS:**
+
+The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that MUST be replaced with your project's language. These steps are wrapped in clear modification markers:
 
 ```yaml
-# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+# <!-- MODIFY THIS SECTION START -->
+# NOTE FOR CODING AGENTS: Please modify ONLY the following steps (Setup Node.js to Install dependencies)
 # according to your project's requirements.
 # Examples:
 # - For Python projects: use setup-python action
-# - For Go projects: use setup-go action
+# - For Go projects: use setup-go action  
 # - For Java projects: use setup-java action
 # - For other languages: use appropriate setup actions
+# <!-- MODIFY THIS SECTION END -->
 ```
 
-**Required Modifications (ONLY these specific sections):**
+**Required Modifications (ONLY between the markers above):**
 - Replace `Setup Node.js` step with appropriate language setup action
-- Replace `Install pnpm` step with your package manager
+- Replace `Install pnpm` step with your package manager  
 - Replace `pnpm install` with your dependency installation command
 - Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
 
-**⚠️ DO NOT MODIFY:**
-- Bot logic, triggers, or conditional statements
-- Repository dispatch events
-- Label management
-- API configurations
-- Security settings
-- Cost tracking mechanisms
-- Any other workflow sections not explicitly mentioned above
+**🔒 PRESERVE THESE CRITICAL SETTINGS:**
+- Keep `MACHINERS_PLATOON_LANG` environment variable references intact
+- Maintain all `allowed_tools` lists exactly as provided
+- Preserve all `custom_instructions` and `direct_prompt` content
+- Keep all repository dispatch event configurations unchanged
+- Maintain all label management logic unchanged
 
 **Examples for Different Languages:**
 - **Python**: Use `setup-python` action, `pip install -r requirements.txt`
 - **Go**: Use `setup-go` action, `go mod download`
-- **Java**: Use `setup-java` action, `mvn install` or `gradle build`
+- **Java**: Use `setup-java` action, `mvn install` or `gradle build`  
 - **Rust**: Use `dtolnay/rust-toolchain` action, `cargo build`
+
+**🤖 AI CODING AGENTS: READ THIS TWICE**
+If you modify ANY part of these workflows other than the sections explicitly marked with `<!-- MODIFY THIS SECTION -->` comments, you will break the entire automation system. The workflows are designed to work across all programming languages without modification to the AI logic.
 
 ## Usage
 
