@@ -129,7 +129,7 @@ jobs:
           disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
           trigger_phrase: "🤖engineer"
           custom_instructions: |
-            Please communicate in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language for all user-facing content.
+            YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
             
             You are an Engineer Bot responsible for addressing feedback on pull requests.
 
@@ -166,7 +166,7 @@ jobs:
             - Performance is maintained or improved
             - Stage all files with `git add .` before committing
           direct_prompt: |
-            Please communicate in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language for all user-facing content.
+            YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
             
             This pull request has received review feedback that needs to be addressed. Please:
             1. Read all the review comments and feedback carefully
