@@ -19,7 +19,7 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 
 ### Automated Integration
 
-Use with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
+Run in your repository's root directory with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
 claude "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into my project"
