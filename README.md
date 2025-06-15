@@ -93,12 +93,11 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
 
 ```yaml
-# NOTE FOR CODING AGENTS: Please modify ONLY the following steps (Setup Node.js to Install dependencies)
+# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
 # according to your project's requirements.
-# ⚠️ WARNING: DO NOT modify any other parts of these workflows!
 # Examples:
 # - For Python projects: use setup-python action
-# - For Go projects: use setup-go action  
+# - For Go projects: use setup-go action
 # - For Java projects: use setup-java action
 # - For other languages: use appropriate setup actions
 ```
