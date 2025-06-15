@@ -1,6 +1,6 @@
 # Machiners Platoon - GitHub Development Agent Squadron
 
-This directory contains the GitHub Actions workflows that implement the **Machiners Platoon**, an automated development agent squadron for the Chamver project.
+This directory contains the GitHub Actions workflows that implement the **Machiners Platoon**, an automated development agent squadron for your project.
 
 ## 🤖 Agent Squadron
 
@@ -19,10 +19,10 @@ This directory contains the GitHub Actions workflows that implement the **Machin
 
 **Trigger**: Repository dispatch event `🏛️ Architecture Review`
 
-- Analyzes the Chamver codebase architecture comprehensively
+- Analyzes the project codebase architecture comprehensively
 - Creates detailed technical implementation plans
 - Specifies exact files and components to modify
-- Follows existing patterns (Cloudflare Workers, Effect-TS, Data Bridge Architecture)
+- Follows existing patterns and architecture
 - Provides integration guidance and risk assessment
 - Automatically triggers Engineer Bot when ready for implementation
 
@@ -32,7 +32,7 @@ This directory contains the GitHub Actions workflows that implement the **Machin
 
 - Creates feature branches automatically (`feature/issue-{number}`)
 - Implements features according to architectural plans
-- Follows Chamver coding conventions and patterns
+- Follows project coding conventions and patterns
 - Runs comprehensive validation (`pnpm validate`)
 - Creates pull requests with detailed descriptions including issue links
 - Updates original issues with PR links
