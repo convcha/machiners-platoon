@@ -36,16 +36,47 @@ Copy the custom action for cost tracking to `.github/actions/claude-result-track
 
 ### 2. Setup and Usage Instructions
 
-After integration, display the following setup and usage information to the user in the CLI terminal:
+After integration, display the following setup and usage information to the user in the CLI terminal using this template:
 
-**Required Configuration:**
-- Navigate to **Settings → Actions → General** in the target repository
-- Enable "Allow GitHub Actions to create and approve pull requests"
-- Add required GitHub secrets:
-  - `ANTHROPIC_API_KEY` - Claude API key for all bots
-  - `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
+```markdown
+## ✅ Integration Complete
 
-**How to Use Machiners Platoon:**
+Created GitHub Actions workflows:
+- product-manager-bot.yml - Analyzes issues and routes them appropriately
+- system-architect-bot.yml - Provides technical planning for complex features
+- engineer-bot.yml - Implements features and creates pull requests
+- architect-review-bot.yml - Reviews PRs for architectural compliance
+- engineer-fixes-bot.yml - Addresses PR feedback and fixes issues
+
+Created custom action:
+- claude-result-tracker/action.yml - Tracks execution costs and metrics
+
+## 🔧 [Technology]-Specific Adaptations
+
+Technology stack updates:
+- [List specific technology adaptations made]
+- [Updated build commands and validation steps]
+- [Framework-specific integrations]
+
+Project-specific customizations:
+- [Tailored instructions for the project domain]
+- [Added framework integration patterns]
+- [Included technology-specific best practices]
+- [Configured proper guidelines for the stack]
+
+## 🛠️ Required Setup
+
+**GitHub Repository Settings:**
+1. Navigate to **Settings → Actions → General** in your repository
+2. Enable "Allow GitHub Actions to create and approve pull requests"
+
+**GitHub Secrets Configuration:**
+Add the following secrets in **Settings → Secrets and variables → Actions**:
+- `ANTHROPIC_API_KEY` - Your Claude API key
+- `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
+
+## 🚀 How to Use
+
 1. **Create an issue** with any feature request or bug report
 2. **Add the `🤖 Machiners Platoon` label** to trigger automation
 3. **The system will automatically:**
@@ -55,7 +86,8 @@ After integration, display the following setup and usage information to the user
    - Review the implementation with feedback loops
    - Prepare the PR for human review and merge
 
-The entire process is automated from issue creation to production-ready code, with built-in cost controls and cycle protection.
+The entire process is automated from issue creation to production-ready code, with built-in cost controls and cycle protection!
+```
 
 ## 🔧 Setup Requirements
 
