@@ -161,10 +161,10 @@ The GitHub token needs:
 ## Labels
 
 - `🤖 Machiners Platoon` - Main trigger label (never removed automatically)
-- `🤖: Review Cycle 1/2/3` - Tracks review iterations
-- `🤖: Architect Approved` - PR ready for human review
-- `🚨: Manual Review Required` - Human intervention needed
-- `🤖: Max Cycles Reached` - Automation stopped due to limits
+- `🤖 Review Cycle 1/2/3` - Tracks review iterations
+- `🤖 Architect Approved` - PR ready for human review
+- `🚨 Manual Review Required` - Human intervention needed
+- `🤖 Max Cycles Reached` - Automation stopped due to limits
 
 ## Documentation
 

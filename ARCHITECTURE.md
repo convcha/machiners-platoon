@@ -144,7 +144,7 @@ The Machiners Platoon operates via sophisticated repository dispatch events:
 5. **Engineer Bot** → Implements feature, creates PR, dispatches `🏗️ Architect PR Review`
 6. **Architect Review Bot** → Reviews PR, creates review cycle tracking
     - **If issues found** → Dispatches `🔧 Fixes Required`
-    - **If approved** → Dispatches `🚀 Deploy Preview` and adds `🤖: Architect Approved` label
+    - **If approved** → Dispatches `🚀 Deploy Preview` and adds `🤖 Architect Approved` label
 7. **Engineer Fixes Bot** (if needed) → Addresses feedback, dispatches `🏗️ Architect PR Review` for re-review
 8. **Cycle Protection** → Maximum 3 review cycles to prevent infinite loops and control costs
 
@@ -165,12 +165,12 @@ The Machiners Platoon operates via sophisticated repository dispatch events:
 
 ### Core Labels
 - `🤖 Machiners Platoon` → Required label to trigger automation (never removed)
-- `🤖: Review Cycle 1/2/3` → Tracks review iterations
-- `🤖: Architect Approved` → PR approved and ready for merge
+- `🤖 Review Cycle 1/2/3` → Tracks review iterations
+- `🤖 Architect Approved` → PR approved and ready for merge
 
 ### Control Labels
-- `🚨: Manual Review Required` → Maximum cycles reached, human intervention needed
-- `🤖: Max Cycles Reached` → Automation stopped due to cycle limits
+- `🚨 Manual Review Required` → Maximum cycles reached, human intervention needed
+- `🤖 Max Cycles Reached` → Automation stopped due to cycle limits
 
 ## 📋 Detailed Agent Capabilities
 
