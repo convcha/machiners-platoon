@@ -84,11 +84,11 @@ Add in **Settings → Secrets and variables → Actions**:
     - Pull requests: Write
   ![](./docs/images/personal-access-tokens.png)
 
-### Language Settings (optional)
+### Bot Communication Language (optional)
 
 Add in **Settings → Secrets and variables → Actions → Variables**:
 - `MACHINERS_PLATOON_LANG` - Target language for bot communications (optional, defaults to "English")
-- Supports any natural language name (e.g., "日本語", "Español", "Français")
+- Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français")
 
 ![](./docs/images/lang.png)
 
