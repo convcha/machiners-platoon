@@ -2,6 +2,61 @@
 
 This project contains the GitHub Actions workflows that implement the **Machiners Platoon**, an automated development agent squadron for your project.
 
+## Getting Started for Humans
+
+Try talking to your coding agent to integrate this workflow.
+
+Example: Claude Code
+```shell
+$ claude "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into the project"
+```
+
+## Getting Started for Coding Agents
+
+When integrating Machiners Platoon into a project, follow these steps:
+
+### 1. Integrate GitHub Actions
+
+Copy the workflow files from this repository to the target project's `.github/workflows/` directory:
+- `product-manager-bot.yml`
+- `system-architect-bot.yml` 
+- `engineer-bot.yml`
+- `architect-review-bot.yml`
+- `engineer-fixes-bot.yml`
+
+Copy the custom action for cost tracking to `.github/actions/claude-result-tracker/`:
+- `action.yml`
+
+**Project Adaptation:** See the "⚠️ Important: Project Adaptation Required" section below for details on adapting workflows to the target project's technology stack.
+
+### 2. Display Required Configuration
+
+After integration, inform the user about the following required setup:
+
+**GitHub Repository Settings:**
+- Navigate to Settings → Actions → General
+- Enable "Allow GitHub Actions to create and approve pull requests"
+
+**Required GitHub Secrets:**
+- `ANTHROPIC_API_KEY` - Claude API key for all bots
+- `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
+
+
+### 3. Explain Usage to Users
+
+Show users how to use Machiners Platoon:
+
+1. **Create an issue** with any feature request or bug report
+2. **Add the `🤖 Machiners Platoon` label** to trigger automation
+3. **The system will automatically:**
+   - Enhance the issue with detailed requirements
+   - Create implementation plans if needed
+   - Implement the feature and create a pull request
+   - Review the implementation with feedback loops
+   - Prepare the PR for human review and merge
+
+The entire process is automated from issue creation to production-ready code, with built-in cost controls and cycle protection.
+
 ## 🔧 Setup Requirements
 
 ### Required GitHub Repository Settings
