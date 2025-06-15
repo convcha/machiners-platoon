@@ -91,7 +91,7 @@ jobs:
             5. Ensure proper integration approach
             6. **APPEND** your architectural planning results to the end of the current issue body
             7. **IMPORTANT**: Add the planning results to the issue body, NOT as comments
-            8. **IMPORTANT**: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
+            8. **IMPORTANT**: Only add/use labels that you are specifically instructed to add. Do not create any additional issue labels.
             9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
             10. **IMPLEMENTATION ANALYSIS**: After providing the architectural plan, analyze if the Engineer Bot should be triggered for implementation. Consider whether this issue has a complete architectural plan and is ready for code implementation.
             11. **CREATE DECISION FILE**: Create a file called `implementation_decision.json` with your decision in this exact JSON format:

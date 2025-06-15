@@ -175,7 +175,7 @@ jobs:
 
             After completing the review:
             - Provide your review feedback through comments
-            - **IMPORTANT**: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
+            - **IMPORTANT**: Only add/use labels that you are specifically instructed to add. Do not create any additional issue labels.
             - **ENGINEER FIXES ANALYSIS**: After your review, analyze if the Engineer Fixes Bot should be triggered for this pull request. Consider whether there are blocking issues that require code changes.
 
             The Engineer Fixes Bot should be triggered if:
@@ -247,8 +247,8 @@ jobs:
               }
             });
 
-      # Trigger Preview Deployment if approved
-      - name: Trigger Preview Deployment
+      # Notify Review Completion if no fixes are required
+      - name: Notify Review Completion
         if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'false'
         uses: actions/github-script@v7
         with:
@@ -256,16 +256,13 @@ jobs:
           script: |
             const prNumber = process.env.PR_NUMBER;
             const issueNumber = process.env.ISSUE_NUMBER;
-
-            console.log('Triggering preview deployment for PR:', prNumber);
-            console.log('Issue number:', issueNumber);
-
-            github.rest.repos.createDispatchEvent({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              event_type: '🚀 Deploy Preview',
-              client_payload: {
-                pr_number: parseInt(prNumber),
-                issue_number: issueNumber ? parseInt(issueNumber) : null
-              }
-            });
+            
+            // Comment on the issue to notify review completion
+            if (issueNumber) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber),
+                body: `✅ **Architectural Review Complete**\n\nThe System Architect Bot has completed the review of PR #${prNumber}.\n\n**Status:** Approved - No fixes required\n\nThe pull request has been approved and is ready for final human review and merge. 🎉`
+              });
+            }
