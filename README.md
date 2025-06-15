@@ -2,6 +2,65 @@
 
 This project contains the GitHub Actions workflows that implement the **Machiners Platoon**, an automated development agent squadron for your project.
 
+## 🔧 Setup Requirements
+
+### Required GitHub Repository Settings
+
+**Allow GitHub Actions to create and approve pull requests**
+
+Machiners Platoon requires GitHub Actions to have permission to create pull requests. This setting must be enabled in your repository:
+
+1. Go to your repository **Settings** → **Actions** → **General**
+2. Scroll down to **Workflow permissions**
+3. Check the box **"Allow GitHub Actions to create and approve pull requests"**
+
+![](./docs/images/pr-permission.png)
+
+📖 [GitHub Documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#preventing-github-actions-from-creating-or-approving-pull-requests)
+
+### Required GitHub Secrets
+
+- `ANTHROPIC_API_KEY` - Claude API key for all bots
+- `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
+
+### Required Permissions
+
+The Claude GitHub app needs:
+
+- **Pull Requests**: Read and write
+- **Issues**: Read and write
+- **Contents**: Read and write
+- **Actions**: Write (for repository dispatch events)
+- **Metadata**: Read
+
+## ⚠️ Important: Project Adaptation Required
+
+**When using these workflows in your project, you MUST modify the project setup steps:**
+
+The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
+
+```yaml
+# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+# according to your project's requirements.
+# Examples:
+# - For Python projects: use setup-python action
+# - For Go projects: use setup-go action  
+# - For Java projects: use setup-java action
+# - For other languages: use appropriate setup actions
+```
+
+**Required Modifications:**
+- Replace `Setup Node.js` step with appropriate language setup action
+- Replace `Install pnpm` step with your package manager
+- Replace `pnpm install` with your dependency installation command
+- Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
+
+**Examples for Different Languages:**
+- **Python**: Use `setup-python` action, `pip install -r requirements.txt`
+- **Go**: Use `setup-go` action, `go mod download`
+- **Java**: Use `setup-java` action, `mvn install` or `gradle build`
+- **Rust**: Use `dtolnay/rust-toolchain` action, `cargo build`
+
 ## 🤖 Agent Squadron
 
 ### 1. Product Manager Bot (`product-manager-bot.yml`)
@@ -137,51 +196,6 @@ The Machiners Platoon operates via sophisticated repository dispatch events:
 - `🚨: Manual Review Required` → Maximum cycles reached, human intervention needed
 - `🤖: Max Cycles Reached` → Automation stopped due to cycle limits
 
-## ⚠️ Important: Project Adaptation Required
-
-**When using these workflows in your project, you MUST modify the project setup steps:**
-
-The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
-
-```yaml
-# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
-# according to your project's requirements.
-# Examples:
-# - For Python projects: use setup-python action
-# - For Go projects: use setup-go action  
-# - For Java projects: use setup-java action
-# - For other languages: use appropriate setup actions
-```
-
-**Required Modifications:**
-- Replace `Setup Node.js` step with appropriate language setup action
-- Replace `Install pnpm` step with your package manager
-- Replace `pnpm install` with your dependency installation command
-- Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
-
-**Examples for Different Languages:**
-- **Python**: Use `setup-python` action, `pip install -r requirements.txt`
-- **Go**: Use `setup-go` action, `go mod download`
-- **Java**: Use `setup-java` action, `mvn install` or `gradle build`
-- **Rust**: Use `dtolnay/rust-toolchain` action, `cargo build`
-
-## 🔧 Setup Requirements
-
-### Required GitHub Secrets
-
-- `ANTHROPIC_API_KEY` - Claude API key for all bots
-- `GITHUB_TOKEN` - Automatically provided by GitHub
-- `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
-
-### Required Permissions
-
-The Claude GitHub app needs:
-
-- **Pull Requests**: Read and write
-- **Issues**: Read and write
-- **Contents**: Read and write
-- **Actions**: Write (for repository dispatch events)
-- **Metadata**: Read
 
 ## 🛡️ Security Features
 
