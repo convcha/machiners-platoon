@@ -63,6 +63,17 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
    - Go to Issues → Labels → New label
    - Name: `🤖 Machiners Platoon`
 
+## Usage
+
+1. Create an issue
+2. Add the `🤖 Machiners Platoon` label to trigger automation
+3. Watch the magic happen:
+    - Issue gets enhanced with detailed requirements
+    - Implementation plan is created (if needed)
+    - Code is implemented and PR is created
+    - Automated review and feedback cycles run
+    - PR is prepared for human review and merge
+
 ## Configuration
 
 ### Repository Settings
@@ -95,17 +106,6 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 - Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français")
 
 ![](./docs/images/lang.png)
-
-## Usage
-
-1. Create an issue with your feature request or bug report
-2. Add the `🤖 Machiners Platoon` label to trigger automation
-3. Watch the magic happen:
-   - Issue gets enhanced with detailed requirements
-   - Implementation plan is created (if needed)
-   - Code is implemented and PR is created
-   - Automated review and feedback cycles run
-   - PR is prepared for human review and merge
 
 ## Bot Squadron
 
