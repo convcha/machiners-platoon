@@ -59,6 +59,10 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
    - `ANTHROPIC_API_KEY` - Your Claude API key
    - `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
 
+5. **Create the trigger label**:
+   - Go to Issues → Labels → New label
+   - Name: `🤖 Machiners Platoon`
+
 ## Configuration
 
 ### Repository Settings
