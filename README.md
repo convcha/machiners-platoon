@@ -33,27 +33,29 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 
 ### Manual Installation
 
-1. **Copy workflow files** to your repository's `.github/workflows/`:
-   - `.github/workflows/product-manager-bot.yml`
-   - `.github/workflows/system-architect-bot.yml`
+1. **Run the installation script** in your repository's root directory:
+   ```bash
+   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/scripts/install.sh | bash
+   ```
+
+   Or download and run locally:
+   ```bash
+   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/scripts/install.sh -o install.sh
+   chmod +x install.sh
+   ./install.sh
+   ```
+
+2. **Insert language-specific setup steps** to `# <!-- INSERT SETUP STEPS HERE -->` in these files:
    - `.github/workflows/engineer-bot.yml`
-   - `.github/workflows/architect-review-bot.yml`
    - `.github/workflows/engineer-fixes-bot.yml`
+   - NEVER: Do not edit other sections
+   - NEVER: Do not edit other files
 
-2. **Copy custom action directories** to your repository's `.github/actions/`:
-   - `.github/actions/claude-result-tracker/`
-
-3. **Insert language-specific setup steps** to `# <!-- INSERT SETUP STEPS HERE -->` in these files
-    - engineer-bot.yml
-    - engineer-fixes-bot.yml
-    - NEVER: Do not edit other sections
-    - NEVER: Do not edit other files
-
-4. **Configure GitHub repository settings**:
+3. **Configure GitHub repository settings**:
    - Enable "Allow GitHub Actions to create and approve pull requests"
    - Path: Settings → Actions → General → Workflow permissions
 
-5. **Add required secrets** (see [Configuration](#configuration) for details):
+4. **Add required secrets** (see [Configuration](#configuration) for details):
    - `ANTHROPIC_API_KEY` - Your Claude API key
    - `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
 
