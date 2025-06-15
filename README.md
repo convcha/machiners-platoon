@@ -33,7 +33,7 @@ This directory contains the GitHub Actions workflows that implement the **Machin
 - Creates feature branches automatically (`feature/issue-{number}`)
 - Implements features according to architectural plans
 - Follows project coding conventions and patterns
-- Runs comprehensive validation (`pnpm validate`)
+- Runs comprehensive validation (e.g. Full lint, format, and typecheck)
 - Creates pull requests with detailed descriptions including issue links
 - Updates original issues with PR links
 - Automatically triggers Architect Review Bot
@@ -57,7 +57,7 @@ This directory contains the GitHub Actions workflows that implement the **Machin
 - Addresses review feedback systematically
 - Implements requested fixes and improvements
 - Maintains code quality throughout fixes
-- Runs comprehensive validation after fixes
+- Runs comprehensive validation (e.g. Full lint, format, and typecheck) after fixes
 - **Review Cycle Protection**: Respects maximum cycle limits
 - Automatically triggers re-review by Architect Bot
 
@@ -182,7 +182,7 @@ The Claude GitHub app needs:
 - ✅ Create detailed technical architecture plans
 - ✅ Implement code following existing patterns and conventions
 - ✅ Create and manage Git branches automatically
-- ✅ Run comprehensive validation (`pnpm validate`)
+- ✅ Run comprehensive validation (e.g. Full lint, format, and typecheck)
 - ✅ Create and update pull requests with proper linking
 - ✅ Provide detailed code reviews with cycle tracking
 - ✅ Address review feedback systematically
