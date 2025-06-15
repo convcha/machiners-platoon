@@ -86,13 +86,16 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 
 ## ⚠️ Important: Project Adaptation Required
 
-**When using these workflows in your project, you MUST modify the project setup steps:**
+**🚨 CRITICAL WARNING: Only modify the specific sections mentioned below. DO NOT change any other parts of the workflows or actions.**
+
+**When using these workflows in your project, you MUST modify ONLY the project setup steps:**
 
 The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
 
 ```yaml
-# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+# NOTE FOR CODING AGENTS: Please modify ONLY the following steps (Setup Node.js to Install dependencies)
 # according to your project's requirements.
+# ⚠️ WARNING: DO NOT modify any other parts of these workflows!
 # Examples:
 # - For Python projects: use setup-python action
 # - For Go projects: use setup-go action  
@@ -100,11 +103,20 @@ The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bo
 # - For other languages: use appropriate setup actions
 ```
 
-**Required Modifications:**
+**Required Modifications (ONLY these specific sections):**
 - Replace `Setup Node.js` step with appropriate language setup action
 - Replace `Install pnpm` step with your package manager
 - Replace `pnpm install` with your dependency installation command
 - Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
+
+**⚠️ DO NOT MODIFY:**
+- Bot logic, triggers, or conditional statements
+- Repository dispatch events
+- Label management
+- API configurations
+- Security settings
+- Cost tracking mechanisms
+- Any other workflow sections not explicitly mentioned above
 
 **Examples for Different Languages:**
 - **Python**: Use `setup-python` action, `pip install -r requirements.txt`
