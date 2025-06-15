@@ -98,6 +98,13 @@ jobs:
           # Checkout the PR branch for fixes
           ref: ${{ github.event.pull_request.head.ref || github.event.issue.pull_request.head.ref }}
 
+      # NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+      # according to your project's requirements.
+      # Examples:
+      # - For Python projects: use setup-python action
+      # - For Go projects: use setup-go action
+      # - For Java projects: use setup-java action
+      # - For other languages: use appropriate setup actions
       - name: Setup Node.js
         if: steps.check_cycle_limit.outputs.should_continue == 'true'
         uses: actions/setup-node@v4

@@ -137,6 +137,34 @@ The Machiners Platoon operates via sophisticated repository dispatch events:
 - `🚨: Manual Review Required` → Maximum cycles reached, human intervention needed
 - `🤖: Max Cycles Reached` → Automation stopped due to cycle limits
 
+## ⚠️ Important: Project Adaptation Required
+
+**When using these workflows in your project, you MUST modify the project setup steps:**
+
+The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that need to be adapted for your project:
+
+```yaml
+# NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+# according to your project's requirements.
+# Examples:
+# - For Python projects: use setup-python action
+# - For Go projects: use setup-go action  
+# - For Java projects: use setup-java action
+# - For other languages: use appropriate setup actions
+```
+
+**Required Modifications:**
+- Replace `Setup Node.js` step with appropriate language setup action
+- Replace `Install pnpm` step with your package manager
+- Replace `pnpm install` with your dependency installation command
+- Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
+
+**Examples for Different Languages:**
+- **Python**: Use `setup-python` action, `pip install -r requirements.txt`
+- **Go**: Use `setup-go` action, `go mod download`
+- **Java**: Use `setup-java` action, `mvn install` or `gradle build`
+- **Rust**: Use `dtolnay/rust-toolchain` action, `cargo build`
+
 ## 🔧 Setup Requirements
 
 ### Required GitHub Secrets

@@ -30,6 +30,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # NOTE FOR CODING AGENTS: Please modify the following steps (Setup Node.js to Install dependencies)
+      # according to your project's requirements.
+      # Examples:
+      # - For Python projects: use setup-python action
+      # - For Go projects: use setup-go action
+      # - For Java projects: use setup-java action
+      # - For other languages: use appropriate setup actions
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
