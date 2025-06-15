@@ -1,4 +1,4 @@
-# Machiners Platoon - GitHub Development Agent Squadron
+# 🤖 Machiners Platoon - GitHub Development Agent Squadron
 
 This project contains the GitHub Actions workflows that implement the **Machiners Platoon**, an automated development agent squadron for your project.
 
