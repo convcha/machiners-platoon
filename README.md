@@ -34,9 +34,27 @@ Copy the custom action for cost tracking to `.github/actions/claude-result-track
 
 **Project Adaptation:** See the "⚠️ Important: Project Adaptation Required" section below for details on adapting workflows to the target project's technology stack.
 
+### 1.1. Language Detection and Communication
+
+**IMPORTANT:** Before displaying the setup template, analyze the target project's README.md content to determine the user's preferred language:
+
+- Read the target project's README.md file
+- Detect the primary language used (English, Japanese, Chinese, Spanish, etc.)
+- Use the detected language for all subsequent communication with the user
+- Translate the setup and usage template to match the detected language
+
+**Language Detection Guidelines:**
+- If README contains primarily Japanese text → Communicate in Japanese
+- If README contains primarily Chinese text → Communicate in Chinese  
+- If README contains primarily Spanish text → Communicate in Spanish
+- If README is mixed or unclear → Default to English
+- If README doesn't exist → Default to English
+
 ### 2. Setup and Usage Instructions
 
 After integration, display the following setup and usage information to the user in the CLI terminal using this template:
+
+**IMPORTANT:** Translate the entire template below to the language detected from the target project's README.md before displaying it to the user.
 
 ```markdown
 ## ✅ Integration Complete
@@ -87,6 +105,60 @@ Add the following secrets in **Settings → Secrets and variables → Actions**:
    - Prepare the PR for human review and merge
 
 The entire process is automated from issue creation to production-ready code, with built-in cost controls and cycle protection!
+```
+
+**Example for Japanese Projects:**
+If the target project's README is primarily in Japanese, translate and display like this:
+
+```markdown
+## ✅ 統合完了
+
+作成されたGitHub Actionsワークフロー:
+- product-manager-bot.yml - 課題を分析し適切にルーティング
+- system-architect-bot.yml - 複雑な機能の技術計画を提供
+- engineer-bot.yml - 機能を実装しプルリクエストを作成
+- architect-review-bot.yml - アーキテクチャの適合性をレビュー
+- engineer-fixes-bot.yml - PRフィードバックと課題修正に対応
+
+作成されたカスタムアクション:
+- claude-result-tracker/action.yml - 実行コストとメトリクスを追跡
+
+## 🔧 [技術名]固有の適応
+
+技術スタックの更新:
+- [実行された特定の技術適応をリスト]
+- [ビルドコマンドと検証ステップの更新]
+- [フレームワーク固有の統合]
+
+プロジェクト固有のカスタマイズ:
+- [プロジェクトドメインに合わせた指示]
+- [フレームワーク統合パターンの追加]
+- [技術固有のベストプラクティスを含む]
+- [スタックに適したガイドラインの設定]
+
+## 🛠️ 必要なセットアップ
+
+**GitHubリポジトリ設定:**
+1. リポジトリの**設定 → Actions → General**に移動
+2. "GitHub Actionsにプルリクエストの作成と承認を許可する"を有効化
+
+**GitHubシークレット設定:**
+**設定 → Secrets and variables → Actions**で以下のシークレットを追加:
+- `ANTHROPIC_API_KEY` - あなたのClaude APIキー
+- `GH_PERSONAL_ACCESS_TOKEN` - リポジトリ権限を持つGitHubトークン
+
+## 🚀 使用方法
+
+1. **課題を作成** - 機能リクエストやバグレポートで課題を作成
+2. **`🤖 Machiners Platoon`ラベルを追加** - 自動化をトリガー
+3. **システムが自動的に実行:**
+   - 詳細な要件で課題を強化
+   - 必要に応じて実装計画を作成
+   - 機能を実装しプルリクエストを作成
+   - フィードバックループで実装をレビュー
+   - 人間のレビューとマージ用にPRを準備
+
+課題作成から本番対応コードまで、コスト制御とサイクル保護を内蔵した完全自動化プロセス！
 ```
 
 ## 🔧 Setup Requirements
