@@ -8,12 +8,12 @@ Try talking to your coding agent to integrate this workflow.
 
 ### Example: [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)
 ```shell
-claude "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into the project"
+claude "https://github.com/convcha/machiners-platoon Read the 'Getting Started for Coding Agents' section and integrate this GitHub Actions into the project"
 ```
 
 For busy developers (skip permission prompts - use at your own risk):
 ```shell
-claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into the project"
+claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read the 'Getting Started for Coding Agents' section and integrate this GitHub Actions into the project"
 ```
 
 ## Getting Started for Coding Agents
