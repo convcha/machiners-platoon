@@ -6,9 +6,9 @@ This project contains the GitHub Actions workflows that implement the **Machiner
 
 Try talking to your coding agent to integrate this workflow.
 
-Example: Claude Code
+Example: [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)
 ```shell
-$ claude "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into the project"
+claude "https://github.com/convcha/machiners-platoon Integrate this GitHub Actions into the project"
 ```
 
 ## Getting Started for Coding Agents
