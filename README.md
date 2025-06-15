@@ -34,23 +34,18 @@ Copy the custom action for cost tracking to `.github/actions/claude-result-track
 
 **Project Adaptation:** See the "⚠️ Important: Project Adaptation Required" section below for details on adapting workflows to the target project's technology stack.
 
-### 2. Display Required Configuration
+### 2. Setup and Usage Instructions
 
-After integration, inform the user about the following required setup:
+After integration, display the following setup and usage information to the user in the CLI terminal:
 
-**GitHub Repository Settings:**
-- Navigate to Settings → Actions → General
+**Required Configuration:**
+- Navigate to **Settings → Actions → General** in the target repository
 - Enable "Allow GitHub Actions to create and approve pull requests"
+- Add required GitHub secrets:
+  - `ANTHROPIC_API_KEY` - Claude API key for all bots
+  - `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
 
-**Required GitHub Secrets:**
-- `ANTHROPIC_API_KEY` - Claude API key for all bots
-- `GH_PERSONAL_ACCESS_TOKEN` - Personal access token for repository dispatch events
-
-
-### 3. Explain Usage to Users
-
-Show users how to use Machiners Platoon:
-
+**How to Use Machiners Platoon:**
 1. **Create an issue** with any feature request or bug report
 2. **Add the `🤖 Machiners Platoon` label** to trigger automation
 3. **The system will automatically:**
