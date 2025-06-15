@@ -34,14 +34,14 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 ### Manual Integration
 
 1. **Copy workflow files** to your repository's `.github/workflows/`:
-   - `.github/workflows/system-architect-bot.yml/product-manager-bot.yml`
-   - `.github/workflows/system-architect-bot.yml/system-architect-bot.yml`
-   - `.github/workflows/system-architect-bot.yml/engineer-bot.yml`
-   - `.github/workflows/system-architect-bot.yml/architect-review-bot.yml`
-   - `.github/workflows/system-architect-bot.yml/engineer-fixes-bot.yml`
+   - `.github/workflows/product-manager-bot.yml`
+   - `.github/workflows/system-architect-bot.yml`
+   - `.github/workflows/engineer-bot.yml`
+   - `.github/workflows/architect-review-bot.yml`
+   - `.github/workflows/engineer-fixes-bot.yml`
 
-2. **Copy custom action files** to your repository's `.github/actions/claude-result-tracker/`:
-   - `.github/actions/claude-result-tracker/action.yml`
+2. **Copy custom action directories** to your repository's `.github/actions/`:
+   - `.github/actions/claude-result-tracker/`
 
 3. **Insert language-specific setup steps** to `# <!-- INSERT SETUP STEPS HERE -->` in these files
     - engineer-bot.yml
