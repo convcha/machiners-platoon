@@ -33,7 +33,7 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 
 ### Manual Installation
 
-1. **Run the installation script** in your repository's root directory:
+1. Run the installation script in your repository's root directory:
    ```shell
    curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/refs/heads/main/scripts/install.sh | bash
    ```
@@ -45,21 +45,21 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
    ./install.sh
    ```
 
-2. **Insert language-specific setup steps** to `# <!-- INSERT SETUP STEPS HERE -->` in these files:
+2. Insert language-specific setup steps to `# <!-- INSERT SETUP STEPS HERE -->` in these files:
    - `.github/workflows/engineer-bot.yml`
    - `.github/workflows/engineer-fixes-bot.yml`
    - NEVER: Do not edit other sections
    - NEVER: Do not edit other files
 
-3. **Configure GitHub repository settings**:
+3. Configure GitHub repository settings:
    - Enable "Allow GitHub Actions to create and approve pull requests"
    - Path: Settings → Actions → General → Workflow permissions
 
-4. **Add required secrets** (see [Configuration](#configuration) for details):
+4. Add required secrets (see [Configuration](#configuration) for details):
    - `ANTHROPIC_API_KEY` - Your Claude API key
    - `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
 
-5. **Create the trigger label**:
+5. Create the trigger label:
    - Go to Issues → Labels → New label
    - Name: `🤖 Machiners Platoon`
 
@@ -98,9 +98,9 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 
 ## Usage
 
-1. **Create an issue** with your feature request or bug report
-2. **Add the `🤖 Machiners Platoon` label** to trigger automation
-3. **Watch the magic happen**:
+1. Create an issue with your feature request or bug report
+2. Add the `🤖 Machiners Platoon` label to trigger automation
+3. Watch the magic happen:
    - Issue gets enhanced with detailed requirements
    - Implementation plan is created (if needed)
    - Code is implemented and PR is created
