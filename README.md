@@ -34,13 +34,13 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 ### Manual Installation
 
 1. **Run the installation script** in your repository's root directory:
-   ```bash
-   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/scripts/install.sh | bash
+   ```shell
+   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/refs/heads/main/scripts/install.sh | bash
    ```
 
    Or download and run locally:
-   ```bash
-   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/scripts/install.sh -o install.sh
+   ```shell
+   curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/refs/heads/main/scripts/install.sh -o install.sh
    chmod +x install.sh
    ./install.sh
    ```
