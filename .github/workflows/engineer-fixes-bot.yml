@@ -1,0 +1,210 @@
+name: Engineer Bot - PR Fixes
+on:
+  pull_request_review_comment:
+    types: [created]
+  issue_comment:
+    types: [created]
+  repository_dispatch:
+    types: ["🔧 Fixes Required"]
+
+jobs:
+  engineer-fixes:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      attestations: none
+      checks: write
+      contents: write
+      deployments: read
+      discussions: write
+      id-token: none
+      issues: write
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+    # Trigger when repository dispatch event is received or manual feedback is provided on a PR
+    if: |
+      github.event_name == 'repository_dispatch' ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '🤖engineer')) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '🤖engineer'))
+    # Add specific environment variables to help identify the PR
+    env:
+      PR_NUMBER: ${{ github.event.client_payload.pr_number || github.event.pull_request.number || github.event.issue.pull_request.number }}
+      ISSUE_NUMBER: ${{ github.event.client_payload.issue_number || github.event.issue.number }}
+    steps:
+      # Check current review cycle count to prevent infinite loops
+      - name: Check review cycle limit
+        id: check_cycle_limit
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: parseInt(prNumber)
+            });
+
+            // Find existing review cycle labels
+            const reviewCycleLabels = pr.labels.filter(label => 
+              label.name.startsWith('🤖 Review Cycle ')
+            );
+
+            let currentCycle = 0;
+            if (reviewCycleLabels.length > 0) {
+              // Extract the highest cycle number
+              const cycleNumbers = reviewCycleLabels.map(label => {
+                const match = label.name.match(/🤖 Review Cycle (\d+)/);
+                return match ? parseInt(match[1]) : 0;
+              });
+              currentCycle = Math.max(...cycleNumbers);
+            }
+
+            console.log(`Current cycle in engineer fixes: ${currentCycle}`);
+
+            if (currentCycle > 3) {
+              console.log('Maximum review cycles (3) reached. Stopping engineer fixes bot execution.');
+              
+              // Add comment explaining the situation
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(prNumber),
+                body: `🚨 **Engineer Fixes Bot Stopped**\n\nThe engineer fixes bot has detected that the maximum review cycle limit (3) has been reached.\n\n**Action Required:**\n- Manual intervention is needed\n- Please review the automated feedback and address remaining issues manually\n- Consider removing cycle labels to reset if appropriate\n\nStopping automated fixes to prevent infinite loops and control AI costs. 🤖💰`
+              });
+              
+              core.setOutput('should_continue', 'false');
+              return;
+            }
+
+            core.setOutput('should_continue', 'true');
+            core.setOutput('current_cycle', currentCycle);
+
+      # Skip all subsequent steps if cycle limit reached
+      - name: Skip if cycle limit reached
+        if: steps.check_cycle_limit.outputs.should_continue == 'false'
+        run: |
+          echo "Skipping engineer fixes - maximum cycles reached"
+          exit 0
+
+      - name: Checkout repository
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: actions/checkout@v4
+        with:
+          # Checkout the PR branch for fixes
+          ref: ${{ github.event.pull_request.head.ref || github.event.issue.pull_request.head.ref }}
+
+      - name: Setup Node.js
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23"
+
+      - name: Install pnpm
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - uses: convcha/claude-code-action@main
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        env:
+          NODE_VERSION: "23"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          timeout_minutes: "30"
+          allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch,mcp__effect-docs__effect_doc_search,mcp__effect-docs__get_effect_doc"
+          disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
+          trigger_phrase: "🤖engineer"
+          custom_instructions: |
+            You are an Engineer Bot responsible for addressing feedback on pull requests.
+
+            Your responsibilities:
+            1. Carefully read all review comments and feedback
+            2. Understand the requested changes and improvements
+            3. Implement the necessary fixes and improvements
+            4. Address each piece of feedback systematically
+            5. Ensure all tests still pass after changes
+            6. Maintain code quality and consistency
+            7. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Implementation guidelines for fixes:
+            - Address each review comment specifically
+            - Maintain the existing code style and patterns
+            - Ensure TypeScript types remain correct
+            - Run tests after each fix to ensure nothing breaks
+            - Follow the same architectural patterns as the original implementation
+            - Add comments or documentation if requested
+            - Improve error handling if suggested
+
+            Process for handling feedback:
+            1. Read all review comments thoroughly
+            2. Prioritize required changes vs suggestions
+            3. Implement fixes one by one
+            4. Test each change
+            5. Run `pnpm install` before committing changes
+            6. **IMPORTANT: After all fixes are complete, run `pnpm validate` to ensure format, lint, and typecheck all pass**
+            7. Stage all files with `git add .` before committing
+            8. Commit changes with descriptive messages referencing the feedback
+            9. Respond to review comments explaining the fixes made
+
+            Quality checks after fixes:
+            - All tests pass
+            - **MANDATORY: Code validation passes (`pnpm validate`) - format, lint, and typecheck must all pass**
+            - TypeScript compilation successful
+            - Code follows project conventions
+            - Performance is not degraded
+            - Run `pnpm install` before committing
+            - Stage all files with `git add .` before committing
+          direct_prompt: |
+            This pull request has received review feedback that needs to be addressed. Please:
+            1. Read all the review comments and feedback carefully
+            2. Implement the necessary fixes and improvements
+            3. Address each piece of feedback systematically
+            4. **CRITICAL: After all fixes are implemented, run `pnpm validate` to ensure format, lint, and typecheck all pass**
+            5. Ensure all tests pass and validation is successful
+            6. Update the pull request with the fixes
+            7. Respond to review comments explaining what was fixed
+            8. After completing fixes, ensure the changes are ready for re-review
+            9. IMPORTANT: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
+            10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            **CRITICAL: Before committing changes, you MUST run `pnpm install` and stage all files with `git add .`**
+
+            **MANDATORY: You MUST run `pnpm validate` before considering the fixes complete. All format, lint, and typecheck issues must be resolved.**
+
+            Focus on addressing the architectural and code quality concerns while maintaining the overall implementation integrity.
+
+      - name: Track Claude execution cost
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: ./.github/actions/claude-result-tracker
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.PR_NUMBER }}
+          cost-name: "Engineer Fixes Bot"
+
+      # Trigger the Architect Review Bot for re-review after fixes
+      - name: Trigger Architect Review Bot for Re-Review
+        if: success() && steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            console.log('Triggering architect re-review for PR:', prNumber);
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🏗️ Architect PR Review',
+              client_payload: {
+                pr_number: parseInt(prNumber),
+                is_pr: true,
+                issue_number: process.env.ISSUE_NUMBER,
+                is_re_review: true
+              }
+            });

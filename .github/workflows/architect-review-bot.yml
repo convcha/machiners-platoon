@@ -1,0 +1,270 @@
+name: System Architect Bot - PR Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+  pull_request_review_comment:
+    types: [created]
+  repository_dispatch:
+    types: ["🏗️ Architect PR Review"]
+
+jobs:
+  architect-review:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      attestations: none
+      checks: write
+      contents: write
+      deployments: read
+      discussions: write
+      id-token: none
+      issues: write
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+    # Review PRs from repository dispatch
+    if: github.event_name == 'repository_dispatch'
+    # Add specific environment variables to help identify the PR
+    env:
+      PR_NUMBER: ${{ github.event.client_payload.pr_number || github.event.pull_request.number }}
+      ISSUE_NUMBER: ${{ github.event.client_payload.issue_number || github.event.issue.number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Check current review cycle count to prevent infinite loops
+      - name: Check review cycle limit
+        id: check_cycle_limit
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: parseInt(prNumber)
+            });
+
+            // Find existing review cycle labels
+            const reviewCycleLabels = pr.labels.filter(label => 
+              label.name.startsWith('🤖 Review Cycle ')
+            );
+
+            let currentCycle = 0;
+            if (reviewCycleLabels.length > 0) {
+              // Extract the highest cycle number
+              const cycleNumbers = reviewCycleLabels.map(label => {
+                const match = label.name.match(/🤖 Review Cycle (\d+)/);
+                return match ? parseInt(match[1]) : 0;
+              });
+              currentCycle = Math.max(...cycleNumbers);
+            }
+
+            const nextCycle = currentCycle + 1;
+            console.log(`Current cycle: ${currentCycle}, Next cycle: ${nextCycle}`);
+
+            if (nextCycle > 3) {
+              console.log('Maximum review cycles (3) reached. Stopping bot execution.');
+              // Add label indicating manual intervention needed
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(prNumber),
+                labels: ['🚨 Manual Review Required', '🤖 Max Cycles Reached']
+              });
+              
+              // Add comment explaining the situation
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(prNumber),
+                body: `🚨 **Automatic Review Cycle Limit Reached**\n\nThe automated review/fix cycle has reached the maximum limit of 3 iterations to prevent infinite loops and control AI costs.\n\n**Current Status:**\n- Review cycles completed: ${currentCycle}\n- Manual intervention is now required\n\n**Next Steps:**\n1. Please review the automated feedback and fixes manually\n2. Address any remaining issues manually\n3. Remove the cycle labels to reset if needed\n4. Request manual review from team members\n\nThank you for your understanding! 🤖💰`
+              });
+              
+              core.setOutput('should_continue', 'false');
+              return;
+            }
+
+            // Add next cycle label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(prNumber),
+              labels: [`🤖 Review Cycle ${nextCycle}`]
+            });
+
+            core.setOutput('should_continue', 'true');
+            core.setOutput('current_cycle', nextCycle);
+
+      # Skip all subsequent steps if cycle limit reached
+      - name: Skip if cycle limit reached
+        if: steps.check_cycle_limit.outputs.should_continue == 'false'
+        run: |
+          echo "Skipping architect review - maximum cycles reached"
+          exit 0
+
+      - uses: convcha/claude-code-action@main
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        env:
+          NODE_VERSION: "23"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          timeout_minutes: "30"
+          allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch,mcp__effect-docs__effect_doc_search,mcp__effect-docs__get_effect_doc"
+          disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
+          custom_instructions: |
+            You are a System Architect Bot reviewing pull requests for the Chamver project.
+
+            Your review responsibilities:
+            1. Verify implementation follows the architectural plan
+            2. Check code quality and adherence to patterns
+            3. Ensure proper integration with existing systems
+            4. Review security considerations
+            5. Validate performance implications
+            6. Check for potential scalability issues
+            7. Ensure proper error handling and type safety
+            8. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Review criteria:
+            - Follows existing Chamver architectural patterns
+            - Proper use of Effect-TS and functional programming patterns
+            - Correct integration with Cloudflare Workers
+            - Proper authentication and authorization handling
+            - Data Bridge Architecture compliance for iframe components
+            - TypeScript type safety and proper error handling
+            - Code follows monorepo structure and conventions
+            - Tests are comprehensive and meaningful
+            - Performance considerations are addressed
+            - Security best practices are followed
+
+            Review format:
+            ## Architectural Review
+
+            ### ✅ Strengths
+            [What was implemented well]
+
+            ### ⚠️ Concerns
+            [Areas that need attention]
+
+            ### 🔧 Required Changes
+            [Must-fix issues before merge]
+
+            ### 💡 Suggestions
+            [Nice-to-have improvements]
+
+            ### 🎯 Architecture Compliance
+            [How well the implementation follows the planned architecture]
+
+            Provide specific line-by-line feedback for any issues found.
+          direct_prompt: |
+            Please conduct a thorough architectural review of this pull request:
+            1. Compare the implementation against the original architectural plan
+            2. Check adherence to Chamver coding patterns and conventions
+            3. Verify proper integration with existing systems
+            4. Review for security, performance, and scalability considerations
+            5. Provide specific feedback with line numbers for any issues
+            6. Suggest improvements where applicable
+
+            Focus on ensuring the implementation meets the architectural standards and integrates well with the existing Chamver codebase.
+
+            After completing the review:
+            - Provide your review feedback through comments
+            - **IMPORTANT**: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
+            - **ENGINEER FIXES ANALYSIS**: After your review, analyze if the Engineer Fixes Bot should be triggered for this pull request. Consider whether there are blocking issues that require code changes.
+
+            The Engineer Fixes Bot should be triggered if:
+            - There are required changes or critical issues identified
+            - Code quality concerns need to be addressed
+            - Security or performance issues were found
+            - Architectural patterns are not followed correctly
+            - Tests are failing or insufficient
+
+            The Engineer Fixes Bot should NOT be triggered if:
+            - The PR is approved without major issues
+            - Only minor suggestions were made
+            - The review is generally positive with no blocking issues
+            - All concerns have been addressed satisfactorily
+
+            If the review is approved (no major issues, generally positive):
+            - Add the "🤖 Architect Approved" label to both the PR and related issue using the available GitHub tools
+            - IMPORTANT: When adding the "🤖 Architect Approved" label, ensure you preserve any existing "🤖 Machiners Platoon" label - do not remove it
+
+            **CREATE DECISION FILE**: Create a file called `fixes_decision.json` with your decision in this exact JSON format:
+            {
+              "needs_fixes": true/false,
+              "reason": "Brief explanation of your decision"
+            }
+            **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            **IMPORTANT**: Do NOT commit the fixes_decision.json file to the repository.
+
+      - name: Track Claude execution cost
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        uses: ./.github/actions/claude-result-tracker
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.PR_NUMBER }}
+          cost-name: "Architect Review Bot"
+
+      - name: Parse fixes decision
+        if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        id: parse_fixes_decision
+        run: |
+          if [ -f fixes_decision.json ]; then
+            needs_fixes=$(jq -r '.needs_fixes' fixes_decision.json)
+            reason=$(jq -r '.reason' fixes_decision.json)
+            echo "needs_fixes=$needs_fixes" >> $GITHUB_OUTPUT
+            echo "reason=$reason" >> $GITHUB_OUTPUT
+            echo "Decision: $needs_fixes - $reason"
+          else
+            echo "No decision file found, defaulting to false"
+            echo "needs_fixes=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Trigger the Engineer Fixes Bot only if analysis determines it's needed
+      - name: Trigger Engineer Fixes Bot
+        if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            console.log('PR number:', prNumber);
+            console.log('Reason for triggering:', `${{ steps.parse_fixes_decision.outputs.reason }}`);
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🔧 Fixes Required',
+              client_payload: {
+                pr_number: parseInt(prNumber),
+                is_pr: true,
+                issue_number: process.env.ISSUE_NUMBER
+              }
+            });
+
+      # Trigger Preview Deployment if approved
+      - name: Trigger Preview Deployment
+        if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'false'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const issueNumber = process.env.ISSUE_NUMBER;
+
+            console.log('Triggering preview deployment for PR:', prNumber);
+            console.log('Issue number:', issueNumber);
+
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🚀 Deploy Preview',
+              client_payload: {
+                pr_number: parseInt(prNumber),
+                issue_number: issueNumber ? parseInt(issueNumber) : null
+              }
+            });

@@ -1,0 +1,210 @@
+name: "Claude Result Tracker"
+description: "Parse Claude execution results and update issue with cost, duration, and token usage information"
+inputs:
+  github-token:
+    description: "GitHub token for updating issues"
+    required: true
+  issue-number:
+    description: "Issue number to update"
+    required: true
+  cost-name:
+    description: "Name of the bot/workflow for result tracking"
+    required: true
+  cost-file-path:
+    description: "Path to Claude execution output JSON file"
+    required: false
+    default: "/home/runner/work/_temp/claude-execution-output.json"
+outputs:
+  total-cost:
+    description: "Total cost in USD"
+    value: ${{ steps.parse-and-update.outputs.total_cost }}
+runs:
+  using: "composite"
+  steps:
+    - name: Parse Claude execution results and update issue
+      id: parse-and-update
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const fs = require('fs');
+          const path = '${{ inputs.cost-file-path }}';
+
+          // Helper function to format numbers with commas
+          function formatNumber(num) {
+            return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          }
+
+          let totalCost = 0;
+          let durationMinutes = 0;
+          let totalInputTokens = 0;
+          let outputTokens = 0;
+
+          // Parse Claude execution results
+          if (fs.existsSync(path)) {
+            try {
+              const fileContent = fs.readFileSync(path, 'utf8');
+              const data = JSON.parse(fileContent);
+              
+              // Extract data from the "result" type object
+              let resultObject;
+              if (Array.isArray(data)) {
+                resultObject = data.find(item => item.type === 'result');
+              } else if (data.type === 'result') {
+                resultObject = data;
+              }
+              
+              if (resultObject) {
+                totalCost = resultObject.total_cost || 0;
+                const durationMs = resultObject.duration_ms || 0;
+                const inputTokens = resultObject.usage?.input_tokens || 0;
+                outputTokens = resultObject.usage?.output_tokens || 0;
+                const cacheCreationTokens = resultObject.usage?.cache_creation_input_tokens || 0;
+                const cacheReadTokens = resultObject.usage?.cache_read_input_tokens || 0;
+                
+                // Calculate total input tokens including cache
+                totalInputTokens = inputTokens + cacheCreationTokens + cacheReadTokens;
+                
+                // Convert duration to minutes
+                durationMinutes = durationMs / 60000;
+                
+                console.log(`Results captured: ${totalCost} USD, ${durationMinutes.toFixed(2)} min, ${totalInputTokens} input tokens, ${outputTokens} output tokens`);
+              } else {
+                console.log('No result object found in output file, defaulting to 0');
+              }
+            } catch (error) {
+              console.log('Error parsing output file, defaulting to 0:', error.message);
+            }
+          } else {
+            console.log(`No output file found at ${path}, defaulting to 0`);
+          }
+
+          // Set outputs
+          core.setOutput('total_cost', totalCost.toString());
+          core.setOutput('duration_minutes', durationMinutes.toFixed(2));
+          core.setOutput('input_tokens', Math.round(totalInputTokens).toString());
+          core.setOutput('output_tokens', outputTokens.toString());
+
+          // Update issue with execution results if cost > 0
+          if (totalCost > 0) {
+            const issueNumber = parseInt('${{ inputs.issue-number }}');
+            const botName = '${{ inputs.cost-name }}';
+            
+            // Get current issue
+            const { data: issue } = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            const issueBody = issue.body || '';
+            
+            // Format tokens with commas
+            const formattedInputTokens = formatNumber(totalInputTokens);
+            const formattedOutputTokens = formatNumber(outputTokens);
+            const costInJPY = totalCost * 150;
+            const newResultEntry = `| ${botName} | ${durationMinutes.toFixed(2)} | ${formattedInputTokens} | ${formattedOutputTokens} | $${totalCost.toFixed(4)} | ¥${costInJPY.toFixed(0)} |`;
+            
+            let updatedBody;
+            
+            // Check if results section already exists
+            if (issueBody.includes('## Claude Results')) {
+              // Check if table exists within results section
+              const resultsMatch = issueBody.match(/## Claude Results[\s\S]*?(?=\n##|\n$|$)/);
+              const resultsSection = resultsMatch ? resultsMatch[0] : '';
+              
+              if (resultsSection.includes('| Bot | Duration')) {
+                // Remove existing table completely and rebuild it
+                const bodyWithoutResultsSection = issueBody.replace(/## Claude Results[\s\S]*?(?=\n##|\n$|$)/, '').trim();
+                
+                // Extract existing table rows (excluding header, separator, and total rows)
+                const existingRows = resultsSection.split('\n')
+                  .filter(line => line.trim().startsWith('|') && 
+                          !line.includes('Bot') && 
+                          !line.includes('---') && 
+                          !line.includes('**Total**') &&
+                          line.trim().length > 0)
+                  .map(line => line.trim());
+                
+                // Check if this bot already has an entry and remove it to avoid duplicates
+                const filteredExistingRows = existingRows.filter(row => {
+                  const cells = row.split('|').map(cell => cell.trim()).filter(cell => cell.length > 0);
+                  return cells.length === 0 || cells[0] !== botName;
+                });
+                
+                // Calculate totals from filtered existing rows only (don't include current entry yet)
+                let totalDuration = 0;
+                let totalInputSum = 0;
+                let totalOutputSum = 0;
+                let totalCostSum = 0;
+                
+                filteredExistingRows.forEach(row => {
+                  const cells = row.split('|').map(cell => cell.trim()).filter(cell => cell.length > 0);
+                  if (cells.length >= 6) {
+                    const duration = parseFloat(cells[1]) || 0;
+                    const inputTokensStr = cells[2].replace(/,/g, '');
+                    const outputTokensStr = cells[3].replace(/,/g, '');
+                    const costStr = cells[4].replace(/\$/g, '');
+                    
+                    totalDuration += duration;
+                    totalInputSum += parseInt(inputTokensStr) || 0;
+                    totalOutputSum += parseInt(outputTokensStr) || 0;
+                    totalCostSum += parseFloat(costStr) || 0;
+                  }
+                });
+                
+                // Add current entry to totals
+                totalDuration += durationMinutes;
+                totalInputSum += totalInputTokens;
+                totalOutputSum += outputTokens;
+                totalCostSum += totalCost;
+                
+                // Build new results section
+                const totalCostInJPY = totalCostSum * 150;
+                const totalEntry = `| **Total** | ${totalDuration.toFixed(2)} | ${formatNumber(totalInputSum)} | ${formatNumber(totalOutputSum)} | $${totalCostSum.toFixed(4)} | ¥${totalCostInJPY.toFixed(0)} |`;
+                
+                const allRows = [...filteredExistingRows, newResultEntry];
+                const tableContent = allRows.join('\n') + '\n' + totalEntry;
+                
+                const newResultsSection = `## Claude Results
+
+          | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
+          |-----|----------------|--------------|---------------|------|-----------|
+          ${tableContent}
+
+          `;
+
+                updatedBody = newResultsSection + bodyWithoutResultsSection;
+              } else {
+                // Add table to existing results section
+                const tableHeader = '\n| Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |\n|-----|----------------|--------------|---------------|------|-----------|';
+                const totalCostInJPY = totalCost * 150;
+                const totalEntry = `| **Total** | ${durationMinutes.toFixed(2)} | ${formattedInputTokens} | ${formattedOutputTokens} | $${totalCost.toFixed(4)} | ¥${totalCostInJPY.toFixed(0)} |`;
+                
+                updatedBody = issueBody.replace('## Claude Results', `## Claude Results${tableHeader}\n${newResultEntry}\n${totalEntry}`);
+              }
+            } else {
+              // Create new results section at the beginning
+              const totalCostInJPY = totalCost * 150;
+              const totalEntry = `| **Total** | ${durationMinutes.toFixed(2)} | ${formattedInputTokens} | ${formattedOutputTokens} | $${totalCost.toFixed(4)} | ¥${totalCostInJPY.toFixed(0)} |`;
+              const resultsSection = `## Claude Results
+
+          | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
+          |-----|----------------|--------------|---------------|------|-----------|
+          ${newResultEntry}
+          ${totalEntry}
+
+          `;
+              updatedBody = resultsSection + issueBody;
+            }
+            
+            // Update the issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: updatedBody
+            });
+            
+            console.log(`Updated issue #${issueNumber} with results: ${botName} - $${totalCost} USD, ${durationMinutes.toFixed(2)} min, ${totalInputTokens}/${outputTokens} tokens`);
+          }

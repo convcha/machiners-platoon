@@ -1,0 +1,139 @@
+name: System Architect Bot - Technical Planning
+on:
+  repository_dispatch:
+    types: ["🏛️ Architecture Review"]
+
+jobs:
+  system-architect:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'repository_dispatch'
+    # Add specific environment variables to help identify the issue
+    env:
+      ISSUE_NUMBER: ${{ github.event.client_payload.issue_number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: convcha/claude-code-action@main
+        env:
+          NODE_VERSION: "23"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          timeout_minutes: "30"
+          allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch,mcp__effect-docs__effect_doc_search,mcp__effect-docs__get_effect_doc"
+          disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
+          custom_instructions: |
+            You are a System Architect Bot with deep knowledge of the Chamver codebase.
+
+            Your responsibilities:
+            1. Analyze the current codebase structure and architecture
+            2. Provide detailed technical implementation plans
+            3. Identify the specific files and components that need modification
+            4. Suggest architectural patterns and best practices
+            5. Consider integration points with existing systems
+            6. Provide code structure recommendations
+            7. Identify potential technical risks and mitigation strategies
+            8. Analyze if Engineer Bot should be triggered for implementation
+            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Based on the codebase analysis, you should:
+            - Reference actual files, functions, and components in the Chamver project
+            - Follow the existing architectural patterns (Cloudflare Workers, Effect-TS, etc.)
+            - Consider the Data Bridge Architecture for iframe-based components
+            - Maintain consistency with the existing monorepo structure
+
+            Always use this format for architectural planning:
+
+            ## Technical Architecture Plan
+
+            ### Files to Modify/Create
+            - `path/to/file.ts` - [Description of changes]
+
+            ### Implementation Steps
+            1. [Step-by-step implementation plan]
+
+            ### Integration Points
+            [How this connects with existing systems]
+
+            ### Technical Considerations
+            [Performance, security, scalability considerations]
+
+            ### Testing Strategy
+            [How to test the implementation]
+
+            ### Risks and Mitigation
+            [Potential issues and how to address them]
+
+            For Engineer Bot decision:
+            The Engineer Bot should be triggered for issues that:
+            - Have a complete technical architecture plan
+            - Are ready for actual code implementation
+            - Have all dependencies resolved
+            - Have clear implementation steps defined
+
+            The Engineer Bot should NOT be triggered for issues that:
+            - Need more architectural planning
+            - Have unresolved dependencies
+            - Are purely documentation or discussion
+            - Need more clarification before implementation
+
+            IMPORTANT: Do NOT commit the decision JSON file to the repository.
+          direct_prompt: |
+            This issue requires detailed technical architecture planning. Please:
+            1. Analyze the current Chamver codebase to understand the existing architecture
+            2. Read the relevant documentation and existing code patterns
+            3. Provide a comprehensive technical implementation plan
+            4. Specify exactly which files need to be created or modified
+            5. Consider the existing patterns like Data Bridge Architecture, Cloudflare Workers, and Effect-TS
+            6. **APPEND** your architectural planning results to the end of the current issue body
+            7. **IMPORTANT**: Add the planning results to the issue body, NOT as comments
+            8. **IMPORTANT**: Only add/use labels required for tracking purposes. Do not create any additional issue labels.
+            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            10. **IMPLEMENTATION ANALYSIS**: After providing the architectural plan, analyze if the Engineer Bot should be triggered for implementation. Consider whether this issue has a complete architectural plan and is ready for code implementation.
+            11. **CREATE DECISION FILE**: Create a file called `implementation_decision.json` with your decision in this exact JSON format:
+                {
+                  "needs_implementation": true/false,
+                  "reason": "Brief explanation of your decision"
+                }
+            12. **IMPORTANT**: Do NOT commit the implementation_decision.json file to the repository.
+
+      - name: Track Claude execution cost
+        uses: ./.github/actions/claude-result-tracker
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.client_payload.issue_number }}
+          cost-name: "System Architect Bot"
+
+      - name: Parse implementation decision
+        id: parse_implementation_decision
+        run: |
+          if [ -f implementation_decision.json ]; then
+            needs_implementation=$(jq -r '.needs_implementation' implementation_decision.json)
+            reason=$(jq -r '.reason' implementation_decision.json)
+            echo "needs_implementation=$needs_implementation" >> $GITHUB_OUTPUT
+            echo "reason=$reason" >> $GITHUB_OUTPUT
+            echo "Decision: $needs_implementation - $reason"
+          else
+            echo "No decision file found, defaulting to false"
+            echo "needs_implementation=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Trigger the Engineer Bot only if analysis determines it's needed
+      - name: Trigger Engineer Bot
+        if: success() && steps.parse_implementation_decision.outputs.needs_implementation == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            console.log('Issue number:', process.env.ISSUE_NUMBER);
+            console.log('Reason for triggering:', `${{ steps.parse_implementation_decision.outputs.reason }}`);
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🛠️ Lets Build This',
+              client_payload: {
+                issue_number: process.env.ISSUE_NUMBER,
+                is_pr: false,
+              }
+            });

@@ -1,0 +1,164 @@
+name: Engineer Bot - Implementation
+on:
+  repository_dispatch:
+    types: ["🛠️ Lets Build This"]
+
+jobs:
+  engineer:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      attestations: none
+      checks: write
+      contents: write
+      deployments: read
+      discussions: write
+      id-token: none
+      issues: write
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+    # Trigger when repository_dispatch event is received
+    if: github.event_name == 'repository_dispatch'
+    # Add specific environment variables to help identify the issue
+    env:
+      ISSUE_NUMBER: ${{ github.event.client_payload.issue_number || github.event.issue.number }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - uses: convcha/claude-code-action@main
+        env:
+          NODE_VERSION: "23"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          timeout_minutes: "30"
+          allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch,mcp__effect-docs__effect_doc_search,mcp__effect-docs__get_effect_doc"
+          disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
+          custom_instructions: |
+            You are an Engineer Bot specialized in implementing features for the Chamver project.
+
+            Your responsibilities:
+            1. Create a new branch for the implementation
+            2. Implement the feature according to the architectural plan
+            3. Follow the existing code patterns and conventions
+            4. Write tests for new functionality
+            5. Ensure type safety with TypeScript
+            6. Run validation (linting, type checking, etc.) with `pnpm validate`
+            7. Create a pull request using mcp__github__create_pull_request with detailed description that includes an "## Issues" section at the top of the PR body with a link to the corresponding issue
+            8. After creating the PR, update the corresponding issue to add a "## Pull Requests" section at the top of the issue body with a link to the created PR
+            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Implementation guidelines:
+            - Follow the monorepo structure (apps/, packages/)
+            - Use Effect-TS patterns for service layers
+            - Implement proper error handling
+            - Follow the existing authentication patterns
+            - Use the Data Bridge Architecture for iframe components
+            - Write comprehensive TypeScript types
+            - Follow the existing naming conventions
+            - Add proper documentation and comments
+
+            Before starting implementation:
+            1. Read the issue description and architectural plan
+            2. Understand the existing codebase structure
+            3. Identify the exact files and components to modify
+
+            Implementation process:
+            1. Create a new branch: `git checkout -b feature/issue-{issue-number}`
+            2. Implement the feature step by step
+            3. Test the implementation
+            4. Run `pnpm install` before committing changes
+            5. Run `pnpm validate` to ensure format, lint, and typecheck pass
+            6. Stage all files with `git add .` before committing
+            7. Commit changes with descriptive messages
+            8. Push the branch
+            9. Create a pull request using mcp__github__create_pull_request
+
+            Always ensure:
+            - Code follows existing patterns
+            - Tests are written and passing
+            - TypeScript types are correct
+            - No linting errors
+            - Proper error handling
+            - Run `pnpm install` before committing
+            - Stage all files with `git add .` before committing
+            - `pnpm validate` passes completely (format, lint, typecheck)
+          direct_prompt: |
+            This issue is ready for implementation. Please:
+            1. Create a new feature branch
+            2. Implement the feature according to the architectural plan in the issue
+            3. Follow the existing Chamver code patterns and conventions
+            4. Write appropriate tests
+            5. **IMPORTANT: After implementation is complete, run `pnpm validate` to ensure format, lint, and typecheck all pass**
+            6. Ensure type safety and no linting errors
+            7. Create a pull request using mcp__github__create_pull_request with a detailed description of the implementation that includes an "## Issues" section at the very top of the PR body with a link to the corresponding issue
+            8. **IMPORTANT: After creating the PR, update the corresponding issue by adding a "## Pull Requests" section at the very top of the issue body with a link to the created PR using mcp__github__update_issue**
+            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Make sure to read the architectural plan and requirements carefully before starting implementation.
+
+            **CRITICAL: Before committing changes, you MUST run `pnpm install` and stage all files with `git add .`**
+
+            **CRITICAL: Before creating the pull request, you MUST run `pnpm validate` and fix any issues it reports.**
+
+            After creating the pull request and updating the issue with the PR link, ensure it is ready for architectural review.
+
+      - name: Track Claude execution cost
+        uses: ./.github/actions/claude-result-tracker
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.ISSUE_NUMBER }}
+          cost-name: "Engineer Bot"
+
+      # Trigger the Architect Review Bot after PR creation
+      - name: Trigger Architect Review Bot
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            // Get the PR number from recent activity
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',
+              direction: 'desc',
+              per_page: 1
+            });
+
+            if (prs.length > 0) {
+              const prNumber = prs[0].number;
+              console.log('Triggering architect review for PR:', prNumber);
+              
+              github.rest.repos.createDispatchEvent({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                event_type: '🏗️ Architect PR Review',
+                client_payload: {
+                  pr_number: prNumber,
+                  is_pr: true,
+                  issue_number: process.env.ISSUE_NUMBER
+                }
+              });
+            } else {
+              console.log('No recent PRs found to review');
+            }

@@ -1,0 +1,181 @@
+name: Product Manager Bot - Issue Enhancement
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  product-manager:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      attestations: none
+      checks: write
+      contents: write
+      deployments: read
+      discussions: write
+      id-token: none
+      issues: write
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+    # Only trigger for issues with specific labels
+    if: |
+      github.event.action == 'labeled' && github.event.label.name == '🤖 Machiners Platoon'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for better context
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: convcha/claude-code-action@main
+        env:
+          NODE_VERSION: "23"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          timeout_minutes: "30"
+          allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch,mcp__effect-docs__effect_doc_search,mcp__effect-docs__get_effect_doc"
+          disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
+          custom_instructions: |
+            You are a Product Manager Bot that specializes in enhancing and clarifying issue requirements.
+
+            Your responsibilities:
+            1. Analyze the issue description and identify missing requirements
+            2. Add detailed acceptance criteria
+            3. Break down complex features into smaller, manageable tasks
+            4. Estimate complexity and effort
+            5. Add dependency information if applicable
+            6. Create a detailed implementation plan outline
+            7. Analyze if the System Architect Bot should be triggered for this issue
+            8. **CRITICAL**: Only add/use labels required for bot triggers. Do not create any additional issue labels.
+            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+
+            Always maintain a professional tone and focus on clarity and completeness.
+            Use the following format for issue enhancement:
+
+            ## Original Request
+            [If the issue content is in a non-English language, translate it to English and include only the translated version here. If it's already in English, preserve the original issue body content here.]
+
+            ## Enhanced Requirements
+            [Detailed requirements based on the original issue]
+
+            ## Acceptance Criteria
+            - [ ] [Specific, testable criteria]
+
+            ## Dependencies
+            [Any dependencies on other issues or systems]
+
+            ## Complexity Estimate
+            [High/Medium/Low with justification]
+
+            For System Architect Bot decision:
+            The System Architect Bot should be triggered for issues that:
+            - Require code changes or new code implementation
+            - Need technical architecture planning
+            - Involve bug fixes that require code modification
+            - Request new features that need programming
+
+            The System Architect Bot should NOT be triggered for issues that:
+            - Are purely documentation requests
+            - Are questions or discussions
+            - Are administrative tasks
+            - Don't involve any code changes
+          direct_prompt: |
+            This issue needs product management enhancement. Please:
+            1. Analyze the current issue description
+            2. **LANGUAGE HANDLING**: If the original issue content is written in a non-English language, translate it to English and include only the translated version in the "## Original Request" section. If it's already in English, preserve it as-is.
+            3. **PRESERVE** the issue body content (translated to English if necessary) in an "## Original Request" section, including only the English version
+            4. Add detailed requirements and acceptance criteria
+            5. Provide categorization information (do NOT create new labels)
+            6. **UPDATE THE ISSUE BODY** with enhanced content while preserving the original description using the mcp__github__update_issue tool
+            7. **UPDATE THE ISSUE TITLE** if it can be improved to be more descriptive, specific, and action-oriented using the mcp__github__update_issue tool
+            8. **IMPORTANT**: Use the mcp__github__update_issue tool to update both the issue body and title directly, NOT as comments
+            9. **IMPORTANT**: Only add/use labels required for bot triggers. Do not create or add any additional issue labels.
+            10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            11. **ARCHITECTURE ANALYSIS**: After updating the issue, analyze if the System Architect Bot should be triggered for this issue. Consider whether this issue requires any code changes, bug fixes, or technical implementation.
+            12. **CREATE DECISION FILE**: Create a file called `architect_decision.json` with your decision in this exact JSON format:
+                {
+                  "next_action": "architect|direct_implementation|none",
+                  "reason": "Brief explanation of your decision"
+                }
+                
+                Use "architect" for issues that:
+                - Need complex architectural planning
+                - Require system design decisions
+                - Are large features requiring multiple components
+                
+                Use "direct_implementation" for issues that:
+                - Need simple implementation without complex architecture
+                - Are straightforward bug fixes
+                - Are minor feature additions that follow existing patterns
+                - Don't require system design or architectural decisions
+                
+                Use "none" for issues that:
+                - Are purely documentation requests
+                - Are questions or discussions
+                - Are administrative tasks
+                - Don't involve any code changes
+            13. **IMPORTANT**: Do NOT commit the architect_decision.json file to the repository.
+
+      - name: Track Claude execution cost
+        uses: ./.github/actions/claude-result-tracker
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          cost-name: "Product Manager Bot"
+
+      - name: Parse architecture decision
+        id: parse_decision
+        run: |
+          if [ -f architect_decision.json ]; then
+            next_action=$(jq -r '.next_action' architect_decision.json)
+            reason=$(jq -r '.reason' architect_decision.json)
+            echo "next_action=$next_action" >> $GITHUB_OUTPUT
+            echo "reason=$reason" >> $GITHUB_OUTPUT
+            echo "Decision: next_action=$next_action - $reason"
+          else
+            echo "No decision file found, defaulting to none"
+            echo "next_action=none" >> $GITHUB_OUTPUT
+          fi
+
+      # Trigger the System Architect Bot for complex issues
+      - name: Trigger System Architect Bot
+        if: success() && steps.parse_decision.outputs.next_action == 'architect'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            console.log('Issue number:', context.issue.number);
+            console.log('Reason for architecture review:', `${{ steps.parse_decision.outputs.reason }}`);
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🏛️ Architecture Review',
+              client_payload: {
+                issue_number: context.issue.number,
+                is_pr: false,
+              }
+            });
+
+      # Trigger the Engineer Bot directly for simple implementations
+      - name: Trigger Engineer Bot (Direct Implementation)
+        if: success() && steps.parse_decision.outputs.next_action == 'direct_implementation'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          script: |
+            console.log('Issue number:', context.issue.number);
+            console.log('Reason for direct implementation:', `${{ steps.parse_decision.outputs.reason }}`);
+            github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: '🛠️ Lets Build This',
+              client_payload: {
+                issue_number: context.issue.number,
+                is_pr: false,
+              }
+            });
