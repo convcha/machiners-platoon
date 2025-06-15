@@ -41,6 +41,8 @@ jobs:
           allowed_tools: "Task,Bash,Glob,Grep,LS,Read,Edit,MultiEdit,Write,NotebookRead,NotebookEdit,TodoRead,TodoWrite,mcp__github_file_ops__commit_files,mcp__github_file_ops__delete_files,mcp__github_file_ops__update_claude_comment,mcp__github__add_issue_comment,mcp__github__add_pull_request_review_comment_to_pending_review,mcp__github__assign_copilot_to_issue,mcp__github__create_and_submit_pull_request_review,mcp__github__create_branch,mcp__github__create_issue,mcp__github__create_or_update_file,mcp__github__create_pending_pull_request_review,mcp__github__create_pull_request,mcp__github__delete_pending_pull_request_review,mcp__github__get_code_scanning_alert,mcp__github__get_commit,mcp__github__get_file_contents,mcp__github__get_issue,mcp__github__get_issue_comments,mcp__github__get_me,mcp__github__get_notification_details,mcp__github__get_pull_request,mcp__github__get_pull_request_comments,mcp__github__get_pull_request_diff,mcp__github__get_pull_request_files,mcp__github__get_pull_request_reviews,mcp__github__get_pull_request_status,mcp__github__get_secret_scanning_alert,mcp__github__get_tag,mcp__github__list_branches,mcp__github__list_code_scanning_alerts,mcp__github__list_commits,mcp__github__list_issues,mcp__github__list_notifications,mcp__github__list_pull_requests,mcp__github__list_secret_scanning_alerts,mcp__github__list_tags,mcp__github__push_files,mcp__github__request_copilot_review,mcp__github__search_code,mcp__github__search_issues,mcp__github__search_repositories,mcp__github__search_users,mcp__github__submit_pending_pull_request_review,mcp__github__update_issue,mcp__github__update_pull_request,mcp__github__update_pull_request_branch"
           disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
           custom_instructions: |
+            Please communicate in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language for all user-facing content.
+            
             You are a Product Manager Bot that specializes in enhancing and clarifying issue requirements.
 
             Your responsibilities:
@@ -58,7 +60,7 @@ jobs:
             Use the following format for issue enhancement:
 
             ## Original Request
-            [If the issue content is in a non-English language, translate it to English and include only the translated version here. If it's already in English, preserve the original issue body content here.]
+            [If the issue content is in a non-${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language, translate it to ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} and include only the translated version here. If it's already in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}, preserve the original issue body content here.]
 
             ## Enhanced Requirements
             [Detailed requirements based on the original issue]
@@ -85,9 +87,11 @@ jobs:
             - Are administrative tasks
             - Don't involve any code changes
           direct_prompt: |
+            Please communicate in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language for all user-facing content.
+            
             This issue needs product management enhancement. Please:
             1. Analyze the current issue description
-            2. **LANGUAGE HANDLING**: If the original issue content is written in a non-English language, translate it to English and include only the translated version in the "## Original Request" section. If it's already in English, preserve it as-is.
+            2. **LANGUAGE HANDLING**: If the original issue content is written in a non-${{ vars.MACHINERS_PLATOON_LANG || 'English' }} language, translate it to ${{ vars.MACHINERS_PLATOON_LANG || 'English' }} and include only the translated version in the "## Original Request" section. If it's already in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}, preserve it as-is.
             3. **PRESERVE** the issue body content (translated to English if necessary) in an "## Original Request" section, including only the English version
             4. Add detailed requirements and acceptance criteria
             5. Provide categorization information (do NOT create new labels)

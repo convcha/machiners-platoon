@@ -33,6 +33,15 @@ Machiners Platoon is a GitHub Actions-powered automated development agent squadr
 - Each bot execution is tracked with cost, duration, and token usage via the `claude-result-tracker` action
 - Cost information is automatically added to issues in a standardized table format
 
+## Language Support
+- All bots support multiple languages through the `MACHINERS_PLATOON_LANG` GitHub Actions variable
+- Set as repository variable in **Settings → Secrets and variables → Actions → Variables**
+- Supports any natural language name (e.g., "日本語", "Español", "Français")
+- Defaults to "English" if not set
+- User-facing content (issue updates, PR descriptions, comments) will be written in the specified language
+- Internal bot instructions remain in English for consistency
+- Markdown section names are also translated to the target language
+
 ## Common Operations
 
 ### Adding New Bots

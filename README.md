@@ -11,6 +11,7 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 - **Automated Development Workflow**: Complete automation from issue to PR
 - **Intelligent Routing**: Automatically determines if features need architectural planning
 - **Multi-Agent Collaboration**: 5 specialized bots handle different aspects of development
+- **Multi-Language Support**: Bots communicate in any language you prefer
 - **Cost Control**: Built-in cycle limits prevent runaway AI costs
 - **Language Agnostic**: Easily adaptable to any programming language or framework
 - **Security First**: Human oversight required for final approval and merge
@@ -46,9 +47,42 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
    - Enable "Allow GitHub Actions to create and approve pull requests"
    - Path: Settings → Actions → General → Workflow permissions
 
-4. **Add required secrets**:
+4. **Add required secrets** (see [Configuration](#configuration) for details):
    - `ANTHROPIC_API_KEY` - Your Claude API key
    - `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
+
+## Configuration
+
+### Repository Settings
+
+Enable PR creation in **Settings → Actions → General**:
+- ✅ Allow GitHub Actions to create and approve pull requests
+
+![](./docs/images/pr-permission.png)
+
+### Required Secrets
+
+Add in **Settings → Secrets and variables → Actions**:
+
+![](./docs/images/repository-secrets.png)
+
+- `ANTHROPIC_API_KEY` - Claude API key for AI operations
+- `GH_PERSONAL_ACCESS_TOKEN` - [GitHub personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for repository operations
+  - The GitHub token needs:
+    - Actions: Write
+    - Contents: Write
+    - Issues: Write
+    - Metadata: Read
+    - Pull requests: Write
+  ![](./docs/images/personal-access-tokens.png)
+
+### Language
+
+Add in **Settings → Secrets and variables → Actions → Variables**:
+- `MACHINERS_PLATOON_LANG` - Target language for bot communications (optional, defaults to "English")
+- Supports any natural language name (e.g., "日本語", "Español", "Français")
+
+![](./docs/images/lang.png)
 
 ## Usage
 
@@ -120,28 +154,6 @@ Update the following in `engineer-bot.yml` and `engineer-fixes-bot.yml`:
 - **Go**: `setup-go` + `go mod download`
 - **Java**: `setup-java` + `mvn install` or `gradle build`
 - **Rust**: `dtolnay/rust-toolchain` + `cargo build`
-
-## Configuration
-
-### Repository Settings
-
-Enable PR creation in **Settings → Actions → General**:
-- ✅ Allow GitHub Actions to create and approve pull requests
-
-### Required Secrets
-
-Add in **Settings → Secrets and variables → Actions**:
-- `ANTHROPIC_API_KEY` - Claude API key for AI operations
-- `GH_PERSONAL_ACCESS_TOKEN` - GitHub token for repository operations
-
-### Required Permissions
-
-The GitHub token needs:
-- Pull Requests: Read and write
-- Issues: Read and write  
-- Contents: Read and write
-- Actions: Write (for dispatch events)
-- Metadata: Read
 
 ## Cost Management
 
