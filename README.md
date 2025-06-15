@@ -16,7 +16,7 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 - **Language Agnostic**: Easily adaptable to any programming language or framework
 - **Security First**: Human oversight required for final approval and merge
 
-## Quick Start
+## Getting Started
 
 ### Automated Integration
 
@@ -43,11 +43,17 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 2. **Copy the custom action** to `.github/actions/claude-result-tracker/`:
    - `action.yml`
 
-3. **Configure GitHub repository settings**:
+3. **Insert language-specific setup steps** to `# <!-- INSERT SETUP STEPS HERE -->` in these files
+    - engineer-bot.yml
+    - engineer-fixes-bot.yml
+    - NEVER: Do not edit other sections
+    - NEVER: Do not edit other files
+
+4. **Configure GitHub repository settings**:
    - Enable "Allow GitHub Actions to create and approve pull requests"
    - Path: Settings → Actions → General → Workflow permissions
 
-4. **Add required secrets** (see [Configuration](#configuration) for details):
+5. **Add required secrets** (see [Configuration](#configuration) for details):
    - `ANTHROPIC_API_KEY` - Your Claude API key
    - `GH_PERSONAL_ACCESS_TOKEN` - GitHub token with repo permissions
 
@@ -83,62 +89,6 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 - Supports any natural language name (e.g., "日本語", "Español", "Français")
 
 ![](./docs/images/lang.png)
-
-## ⚠️ Important: Language Setup Requirements
-
-**🚨🚨🚨 CRITICAL WARNING FOR AI CODING AGENTS 🚨🚨🚨**
-
-**YOU MUST NOT CHANGE, EDIT, OR ALTER THESE WORKFLOWS BEYOND THE EXPLICITLY MARKED SECTIONS BELOW.**
-
-**⛔ FORBIDDEN MODIFICATIONS - NEVER CHANGE THESE:**
-- `allowed_tools` lists in ANY workflow file
-- `custom_instructions` content in ANY workflow file  
-- `direct_prompt` content in ANY workflow file
-- Repository dispatch event names or triggers
-- Bot logic, conditions, or decision-making code
-- Label management (`🤖 Machiners Platoon`, etc.)
-- API configurations and security settings
-- Cost tracking and cycle protection mechanisms
-- Language settings (`MACHINERS_PLATOON_LANG` references)
-- Any sections not explicitly marked with `<!-- MODIFY THIS SECTION -->`
-
-**✅ ONLY MODIFY THESE EXPLICITLY MARKED SECTIONS:**
-
-The Engineer Bot (`engineer-bot.yml`) and Engineer Fixes Bot (`engineer-fixes-bot.yml`) workflows contain Node.js-specific setup steps that MUST be replaced with your project's language. These steps are wrapped in clear modification markers:
-
-```yaml
-# <!-- MODIFY THIS SECTION START -->
-# NOTE FOR CODING AGENTS: Please modify ONLY the following steps (Setup Node.js to Install dependencies)
-# according to your project's requirements.
-# Examples:
-# - For Python projects: use setup-python action
-# - For Go projects: use setup-go action  
-# - For Java projects: use setup-java action
-# - For other languages: use appropriate setup actions
-# <!-- MODIFY THIS SECTION END -->
-```
-
-**Required Modifications (ONLY between the markers above):**
-- Replace `Setup Node.js` step with appropriate language setup action
-- Replace `Install pnpm` step with your package manager  
-- Replace `pnpm install` with your dependency installation command
-- Update validation commands in bot instructions (`pnpm`, `npm`, `pip`, `go mod`, etc.)
-
-**🔒 PRESERVE THESE CRITICAL SETTINGS:**
-- Keep `MACHINERS_PLATOON_LANG` environment variable references intact
-- Maintain all `allowed_tools` lists exactly as provided
-- Preserve all `custom_instructions` and `direct_prompt` content
-- Keep all repository dispatch event configurations unchanged
-- Maintain all label management logic unchanged
-
-**Examples for Different Languages:**
-- **Python**: Use `setup-python` action, `pip install -r requirements.txt`
-- **Go**: Use `setup-go` action, `go mod download`
-- **Java**: Use `setup-java` action, `mvn install` or `gradle build`  
-- **Rust**: Use `dtolnay/rust-toolchain` action, `cargo build`
-
-**🤖 AI CODING AGENTS: READ THIS TWICE**
-If you modify ANY part of these workflows other than the sections explicitly marked with `<!-- MODIFY THIS SECTION -->` comments, you will break the entire automation system. The workflows are designed to work across all programming languages without modification to the AI logic.
 
 ## Usage
 

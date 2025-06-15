@@ -98,27 +98,7 @@ jobs:
           # Checkout the PR branch for fixes
           ref: ${{ github.event.pull_request.head.ref || github.event.issue.pull_request.head.ref }}
 
-      # <!-- MODIFY THIS SECTION START -->
-      # 🚨 AI CODING AGENTS: ONLY CHANGE THE NEXT 2 STEPS FOR YOUR PROJECT'S LANGUAGE
-      # 🚨 DO NOT MODIFY ANYTHING ELSE IN THIS FILE
-      # Replace these Node.js steps with your project's language setup:
-      # Examples:
-      # - For Python projects: use setup-python action
-      # - For Go projects: use setup-go action
-      # - For Java projects: use setup-java action
-      # - For other languages: use appropriate setup actions
-      - name: Setup Node.js
-        if: steps.check_cycle_limit.outputs.should_continue == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-
-      - name: Install pnpm
-        if: steps.check_cycle_limit.outputs.should_continue == 'true'
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10
-      # <!-- MODIFY THIS SECTION END -->
+      # <!-- INSERT SETUP STEPS HERE -->
 
       - uses: convcha/claude-code-action@main
         if: steps.check_cycle_limit.outputs.should_continue == 'true'
