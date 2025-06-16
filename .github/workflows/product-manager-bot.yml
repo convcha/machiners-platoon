@@ -24,7 +24,7 @@ jobs:
     # Only trigger for issues with specific labels and from repository owners
     if: |
       github.event.action == 'labeled' && 
-      github.event.label.name == '🤖 Machiners Platoon' &&
+      github.event.label.name == (vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon') &&
       github.event.issue.user.login == github.repository_owner
     steps:
       - name: Checkout repository
@@ -56,7 +56,7 @@ jobs:
             6. Create a detailed implementation plan outline
             7. Analyze if the System Architect Bot should be triggered for this issue
             8. **CRITICAL**: Only add/use labels required for bot triggers. Do not create any additional issue labels.
-            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            9. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             Always maintain a professional tone and focus on clarity and completeness.
             Use the following format for issue enhancement:
@@ -101,7 +101,7 @@ jobs:
             7. **UPDATE THE ISSUE TITLE** if it can be improved to be more descriptive, specific, and action-oriented using the mcp__github__update_issue tool
             8. **IMPORTANT**: Use the mcp__github__update_issue tool to update both the issue body and title directly, NOT as comments
             9. **IMPORTANT**: Only add/use labels required for bot triggers. Do not create or add any additional issue labels.
-            10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            10. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
             11. **ARCHITECTURE ANALYSIS**: After updating the issue, analyze if the System Architect Bot should be triggered for this issue. Consider whether this issue requires any code changes, bug fixes, or technical implementation.
             12. **CREATE DECISION FILE**: Create a file called `architect_decision.json` with your decision in this exact JSON format:
                 {

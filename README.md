@@ -68,12 +68,12 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 
 5. Create the trigger label:
    - Go to Issues → Labels → New label
-   - Name: `🤖 Machiners Platoon`
+   - Name: `🤖 Machiners Platoon` (customizable - see [Configuration](#github-actions-variables))
 
 ## Usage
 
 1. Create an issue (rough title and description are fine - bots will enhance them)
-2. Add the `🤖 Machiners Platoon` label to trigger automation
+2. Add the trigger label (default: `🤖 Machiners Platoon`) to trigger automation
 3. Watch the magic happen:
     - Issue gets enhanced with detailed requirements
     - Implementation plan is created (if needed)
@@ -110,6 +110,7 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 | Name | Required | Description | Default Value |
 |----|:---:|----|----|
 | `MACHINERS_PLATOON_LANG` | ❌ | Target language for bot communications. Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français") | "English" |
+| `MACHINERS_PLATOON_TRIGGER_LABEL` | ❌ | Custom trigger label for activating the bot squadron. Allows using different labels for different projects or environments | "🤖 Machiners Platoon" |
 
 ![](./docs/images/lang.png)
 
@@ -148,7 +149,7 @@ Addresses review feedback systematically and maintains code quality throughout i
 
 ```mermaid
 graph TD
-    A[Create Issue] --> B[Add 🤖 Machiners Platoon Label]
+    A[Create Issue] --> B[Add Trigger Label]
     B --> C[Product Manager Bot Enhances]
     C --> D{Complexity Analysis}
     D -->|Complex| E[System Architect Bot]
@@ -179,7 +180,7 @@ graph TD
 
 ## Labels
 
-- `🤖 Machiners Platoon` - Main trigger label (never removed automatically)
+- Trigger Label (default: `🤖 Machiners Platoon`) - Main trigger label (never removed automatically, configurable via `MACHINERS_PLATOON_TRIGGER_LABEL`)
 - `🤖 Review Cycle 1/2/3` - Tracks review iterations
 - `🤖 Architect Approved` - PR ready for human review
 - `🚨 Manual Review Required` - Human intervention needed

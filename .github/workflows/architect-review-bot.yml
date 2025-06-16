@@ -130,7 +130,7 @@ jobs:
             5. Validate performance implications
             6. Check for potential scalability issues
             7. Ensure proper error handling and type safety
-            8. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            8. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             Review criteria:
             - Follows existing code patterns and conventions
@@ -193,14 +193,14 @@ jobs:
 
             If the review is approved (no major issues, generally positive):
             - Add the "🤖 Architect Approved" label to both the PR and related issue using the available GitHub tools
-            - IMPORTANT: When adding the "🤖 Architect Approved" label, ensure you preserve any existing "🤖 Machiners Platoon" label - do not remove it
+            - IMPORTANT: When adding the "🤖 Architect Approved" label, ensure you preserve any existing "${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}" label - do not remove it
 
             **CREATE DECISION FILE**: Create a file called `fixes_decision.json` with your decision in this exact JSON format:
             {
               "needs_fixes": true/false,
               "reason": "Brief explanation of your decision"
             }
-            **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
             **IMPORTANT**: Do NOT commit the fixes_decision.json file to the repository.
 
       - name: Track Claude execution cost

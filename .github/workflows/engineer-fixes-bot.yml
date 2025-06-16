@@ -123,7 +123,7 @@ jobs:
             4. Address each piece of feedback systematically
             5. Ensure all tests still pass after changes
             6. Maintain code quality and consistency
-            7. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            7. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             Implementation guidelines for fixes:
             - Address each review comment specifically
@@ -161,7 +161,7 @@ jobs:
             7. Respond to review comments explaining what was fixed
             8. After completing fixes, ensure the changes are ready for re-review
             9. **IMPORTANT**: Only add/use labels that you are specifically instructed to add. Do not create any additional issue labels.
-            10. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            10. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             **MANDATORY: You MUST run validation (e.g. lint, format and typecheck) before considering the fixes complete. All quality checks must pass.**
 

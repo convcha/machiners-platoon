@@ -23,10 +23,17 @@ Machiners Platoon is a GitHub Actions-powered automated development agent squadr
 - `🚀 Deploy Preview` - Triggers preview deployment
 
 ## Critical Label Management
-- **NEVER** remove the `🤖 Machiners Platoon` label from Issues or PRs - this is the primary trigger label
+- **NEVER** remove the trigger label from Issues or PRs - this is the primary trigger label
+- The trigger label is configurable via the `MACHINERS_PLATOON_TRIGGER_LABEL` GitHub Actions variable (defaults to `🤖 Machiners Platoon`)
 - Review cycle labels (`🤖 Review Cycle 1/2/3`) track automation iterations
 - `🤖 Architect Approved` indicates PR approval
 - `🚨 Manual Review Required` and `🤖 Max Cycles Reached` indicate when human intervention is needed
+
+## Trigger Label Configuration
+- The trigger label can be customized by setting the `MACHINERS_PLATOON_TRIGGER_LABEL` GitHub Actions variable
+- Set as repository variable in **Settings → Secrets and variables → Actions → Variables**
+- Defaults to `🤖 Machiners Platoon` if not configured
+- This allows using different trigger labels for different projects or environments
 
 ## Cost Control & Cycle Protection
 - Maximum 3 automated review cycles to prevent infinite loops and control AI costs
@@ -53,7 +60,7 @@ When adding new bot workflows:
 
 ### Modifying Bot Instructions
 Bot behavior is defined in the `custom_instructions` and `direct_prompt` sections of each workflow. Key requirements:
-- Always preserve the `🤖 Machiners Platoon` label
+- Always preserve the configured trigger label (defaults to `🤖 Machiners Platoon`)
 - Use repository dispatch events for bot coordination
 - Include cost tracking and cycle protection
 - Follow the established JSON decision file pattern for bot routing

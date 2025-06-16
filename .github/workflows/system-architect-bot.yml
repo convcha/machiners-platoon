@@ -37,7 +37,7 @@ jobs:
             6. Provide code structure recommendations
             7. Identify potential technical risks and mitigation strategies
             8. Analyze if Engineer Bot should be triggered for implementation
-            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            9. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             Based on the codebase analysis, you should:
             - Follow existing architectural patterns and conventions
@@ -92,7 +92,7 @@ jobs:
             6. **APPEND** your architectural planning results to the end of the current issue body
             7. **IMPORTANT**: Add the planning results to the issue body, NOT as comments
             8. **IMPORTANT**: Only add/use labels that you are specifically instructed to add. Do not create any additional issue labels.
-            9. **CRITICAL**: NEVER remove the '🤖 Machiners Platoon' label from Issues or PRs. This label must always be preserved.
+            9. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
             10. **IMPLEMENTATION ANALYSIS**: After providing the architectural plan, analyze if the Engineer Bot should be triggered for implementation. Consider whether this issue has a complete architectural plan and is ready for code implementation.
             11. **CREATE DECISION FILE**: Create a file called `implementation_decision.json` with your decision in this exact JSON format:
                 {
