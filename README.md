@@ -16,6 +16,10 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 - 🔧 **Language Agnostic**: Easily adaptable to any programming language or framework
 - 🔒 **Security First**: Human oversight required for final approval and merge
 
+## Demo (Japanese)
+
+https://github.com/convcha/rust-wc/issues/5
+
 ## Getting Started
 
 ### Automated Installation (Recommended)
