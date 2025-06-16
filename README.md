@@ -18,13 +18,21 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 
 ## Getting Started
 
-### Automated Installation
+### Automated Installation (Recommended)
 
 Run in your repository's root directory with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
 claude "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project"
 ```
+
+For busy developers (skip permission prompts - use at your own risk):
+
+```bash
+claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project"
+```
+
+**Note**: After automated installation, you'll still need to manually configure repository settings and secrets as described in the [Configuration](#configuration) section.
 
 For busy developers (skip permission prompts - use at your own risk):
 ```bash
@@ -83,29 +91,28 @@ Enable PR creation in **Settings → Actions → General**:
 
 ![](./docs/images/pr-permission.png)
 
-### Required Secrets
+### GitHub Actions Secrets
 
-Add in **Settings → Secrets and variables → Actions**:
+Add in **Settings → Secrets and variables → Actions → Secrets**:
 
 ![](./docs/images/repository-secrets.png)
 
-- `ANTHROPIC_API_KEY` - Claude API key for AI operations
-- `GH_PERSONAL_ACCESS_TOKEN` - [GitHub personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) for repository operations
-  - The GitHub token needs:
-    - Actions: Write
-    - Contents: Write
-    - Issues: Write
-    - Metadata: Read
-    - Pull requests: Write
-  ![](./docs/images/personal-access-tokens.png)
+| Name | Required | Description | Default Value |
+|------|----------|-------------|---------------|
+| `ANTHROPIC_API_KEY` | ✅ | Claude API key for AI operations | N/A |
+| `GH_PERSONAL_ACCESS_TOKEN` | ✅ | [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with repo permissions (Actions: Write, Contents: Write, Issues: Write, Metadata: Read, Pull requests: Write) | N/A |
 
-### Bot Communication Language (optional)
+![](./docs/images/personal-access-tokens.png)
+
+### GitHub Actions Variables
 
 Add in **Settings → Secrets and variables → Actions → Variables**:
-- `MACHINERS_PLATOON_LANG` - Target language for bot communications (optional, defaults to "English")
-- Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français")
 
 ![](./docs/images/lang.png)
+
+| Name | Required | Description | Default Value |
+|------|----------|-------------|---------------|
+| `MACHINERS_PLATOON_LANG` | ❌ | Target language for bot communications. Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français") | "English" |
 
 ## Bot Squadron
 
