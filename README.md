@@ -113,6 +113,20 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 
 ![](./docs/images/lang.png)
 
+## Updates
+
+When this repository receives updates, you can easily apply the updates to your repository using [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
+
+```bash
+claude "Compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps"
+```
+
+For busy developers (skip permission prompts - use at your own risk):
+
+```bash
+claude --dangerously-skip-permissions "Compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps"
+```
+
 ## Bot Squadron
 
 ### Product Manager Bot
