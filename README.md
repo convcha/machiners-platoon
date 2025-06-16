@@ -8,13 +8,13 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 
 ## Features
 
-- **Automated Development Workflow**: Complete automation from issue to PR
-- **Intelligent Routing**: Automatically determines if features need architectural planning
-- **Multi-Agent Collaboration**: 5 specialized bots handle different aspects of development
-- **Multi-Language Support**: Bots communicate in any language you prefer
-- **Cost Control**: Built-in cycle limits prevent runaway AI costs
-- **Language Agnostic**: Easily adaptable to any programming language or framework
-- **Security First**: Human oversight required for final approval and merge
+- ⚡ **Automated Development Workflow**: Complete automation from issue to PR
+- 📝 **Flexible Issue Creation**: Issue titles and descriptions can be rough - bots will enhance and complete them automatically
+- 🤖 **Multi-Agent Collaboration**: 5 specialized bots handle different aspects of development
+- 🌐 **Multi-Language Support**: Bots communicate in any language you prefer
+- 💰 **Cost Control**: Built-in cycle limits prevent runaway AI costs
+- 🔧 **Language Agnostic**: Easily adaptable to any programming language or framework
+- 🔒 **Security First**: Human oversight required for final approval and merge
 
 ## Getting Started
 
@@ -68,7 +68,7 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 
 ## Usage
 
-1. Create an issue
+1. Create an issue (rough title and description are fine - bots will enhance them)
 2. Add the `🤖 Machiners Platoon` label to trigger automation
 3. Watch the magic happen:
     - Issue gets enhanced with detailed requirements
