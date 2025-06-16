@@ -34,11 +34,6 @@ claude --dangerously-skip-permissions "https://github.com/convcha/machiners-plat
 
 **Note**: After automated installation, you'll still need to manually configure repository settings and secrets as described in the [Configuration](#configuration) section.
 
-For busy developers (skip permission prompts - use at your own risk):
-```bash
-claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project"
-```
-
 ### Manual Installation
 
 1. Run the installation script in your repository's root directory:
