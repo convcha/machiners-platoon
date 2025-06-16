@@ -21,9 +21,11 @@ jobs:
       pull-requests: write
       security-events: read
       statuses: write
-    # Only trigger for issues with specific labels
+    # Only trigger for issues with specific labels and from repository owners
     if: |
-      github.event.action == 'labeled' && github.event.label.name == '🤖 Machiners Platoon'
+      github.event.action == 'labeled' && 
+      github.event.label.name == '🤖 Machiners Platoon' &&
+      github.event.issue.user.login == github.repository_owner
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
