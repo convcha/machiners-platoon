@@ -90,12 +90,12 @@ Enable PR creation in **Settings → Actions → General**:
 
 Add in **Settings → Secrets and variables → Actions → Secrets**:
 
-![](./docs/images/repository-secrets.png)
-
 | Name | Required | Description | Default Value |
-|------|----------|-------------|---------------|
+|----|:---:|----|----|
 | `ANTHROPIC_API_KEY` | ✅ | Claude API key for AI operations | N/A |
 | `GH_PERSONAL_ACCESS_TOKEN` | ✅ | [GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) with repo permissions (Actions: Write, Contents: Write, Issues: Write, Metadata: Read, Pull requests: Write) | N/A |
+
+![](./docs/images/repository-secrets.png)
 
 ![](./docs/images/personal-access-tokens.png)
 
@@ -103,11 +103,11 @@ Add in **Settings → Secrets and variables → Actions → Secrets**:
 
 Add in **Settings → Secrets and variables → Actions → Variables**:
 
-![](./docs/images/lang.png)
-
 | Name | Required | Description | Default Value |
-|------|----------|-------------|---------------|
+|----|:---:|----|----|
 | `MACHINERS_PLATOON_LANG` | ❌ | Target language for bot communications. Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français") | "English" |
+
+![](./docs/images/lang.png)
 
 ## Bot Squadron
 
