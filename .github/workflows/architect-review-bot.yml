@@ -31,6 +31,7 @@ jobs:
     env:
       PR_NUMBER: ${{ github.event.client_payload.pr_number || github.event.pull_request.number }}
       ISSUE_NUMBER: ${{ github.event.client_payload.issue_number || github.event.issue.number }}
+      ACCUMULATED_SUMMARY: ${{ github.event.client_payload.accumulated_summary }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -205,11 +206,13 @@ jobs:
 
       - name: Track Claude execution cost
         if: steps.check_cycle_limit.outputs.should_continue == 'true'
+        id: track-cost
         uses: ./.github/actions/claude-result-tracker
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ env.ISSUE_NUMBER }}
           cost-name: "Architect Review Bot"
+          accumulated-summary: ${{ env.ACCUMULATED_SUMMARY }}
 
       - name: Parse fixes decision
         if: steps.check_cycle_limit.outputs.should_continue == 'true'
@@ -236,6 +239,7 @@ jobs:
             const prNumber = process.env.PR_NUMBER;
             console.log('PR number:', prNumber);
             console.log('Reason for triggering:', `${{ steps.parse_fixes_decision.outputs.reason }}`);
+            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -243,7 +247,8 @@ jobs:
               client_payload: {
                 pr_number: parseInt(prNumber),
                 is_pr: true,
-                issue_number: process.env.ISSUE_NUMBER
+                issue_number: process.env.ISSUE_NUMBER,
+                accumulated_summary: accumulatedSummary
               }
             });
 

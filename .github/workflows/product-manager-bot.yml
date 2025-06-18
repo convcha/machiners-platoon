@@ -128,6 +128,7 @@ jobs:
             13. **IMPORTANT**: Do NOT commit the architect_decision.json file to the repository.
 
       - name: Track Claude execution cost
+        id: track-cost
         uses: ./.github/actions/claude-result-tracker
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -157,6 +158,7 @@ jobs:
           script: |
             console.log('Issue number:', context.issue.number);
             console.log('Reason for architecture review:', `${{ steps.parse_decision.outputs.reason }}`);
+            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -164,6 +166,7 @@ jobs:
               client_payload: {
                 issue_number: context.issue.number,
                 is_pr: false,
+                accumulated_summary: accumulatedSummary
               }
             });
 
@@ -176,6 +179,7 @@ jobs:
           script: |
             console.log('Issue number:', context.issue.number);
             console.log('Reason for direct implementation:', `${{ steps.parse_decision.outputs.reason }}`);
+            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -183,5 +187,6 @@ jobs:
               client_payload: {
                 issue_number: context.issue.number,
                 is_pr: false,
+                accumulated_summary: accumulatedSummary
               }
             });

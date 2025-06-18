@@ -10,6 +10,7 @@ jobs:
     # Add specific environment variables to help identify the issue
     env:
       ISSUE_NUMBER: ${{ github.event.client_payload.issue_number }}
+      ACCUMULATED_SUMMARY: ${{ github.event.client_payload.accumulated_summary }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -102,11 +103,13 @@ jobs:
             12. **IMPORTANT**: Do NOT commit the implementation_decision.json file to the repository.
 
       - name: Track Claude execution cost
+        id: track-cost
         uses: ./.github/actions/claude-result-tracker
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.client_payload.issue_number }}
           cost-name: "System Architect Bot"
+          accumulated-summary: ${{ env.ACCUMULATED_SUMMARY }}
 
       - name: Parse implementation decision
         id: parse_implementation_decision
@@ -131,6 +134,7 @@ jobs:
           script: |
             console.log('Issue number:', process.env.ISSUE_NUMBER);
             console.log('Reason for triggering:', `${{ steps.parse_implementation_decision.outputs.reason }}`);
+            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -138,5 +142,6 @@ jobs:
               client_payload: {
                 issue_number: process.env.ISSUE_NUMBER,
                 is_pr: false,
+                accumulated_summary: accumulatedSummary
               }
             });
