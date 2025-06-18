@@ -99,7 +99,7 @@ jobs:
             3. **PRESERVE** the issue body content (translated to English if necessary) in an "## Original Request" section, including only the English version
             4. Add detailed requirements and acceptance criteria
             5. Provide categorization information (do NOT create new labels)
-            6. **UPDATE THE ISSUE BODY** with enhanced content while preserving the original description using the mcp__github__update_issue tool. **CRITICAL: When updating the issue body, you MUST preserve any existing "## Execution Summary" section that contains cost tracking information if it exists.**
+            6. **UPDATE THE ISSUE BODY** with enhanced content while preserving the original description using the mcp__github__update_issue tool.
             7. **UPDATE THE ISSUE TITLE** if it can be improved to be more descriptive, specific, and action-oriented using the mcp__github__update_issue tool
             8. **IMPORTANT**: Use the mcp__github__update_issue tool to update both the issue body and title directly, NOT as comments
             9. **IMPORTANT**: Only add/use labels required for bot triggers. Do not create or add any additional issue labels.
