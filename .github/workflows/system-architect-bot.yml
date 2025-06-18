@@ -89,7 +89,7 @@ jobs:
             3. Provide a comprehensive technical implementation plan
             4. Consider existing patterns and architecture
             5. Ensure proper integration approach
-            6. **APPEND** your architectural planning results to the end of the current issue body. **CRITICAL: When updating the issue body, you MUST preserve any existing "## Claude Results" section that contains cost tracking information. Read the current issue body first, preserve the Claude Results section if it exists, and include it at the end of the updated issue body after your architectural planning results.**
+            6. **APPEND** your architectural planning results to the end of the current issue body. **CRITICAL: When updating the issue body, you MUST preserve any existing "## Execution Summary" section that contains cost tracking information. Read the current issue body first, preserve the Execution Summary section if it exists, and include it at the end of the updated issue body after your architectural planning results.**
             7. **IMPORTANT**: Add the planning results to the issue body, NOT as comments
             8. **IMPORTANT**: Only add/use labels that you are specifically instructed to add. Do not create any additional issue labels.
             9. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.

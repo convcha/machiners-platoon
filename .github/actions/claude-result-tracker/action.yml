@@ -108,14 +108,14 @@ runs:
             let updatedBody;
             
             // Check if results section already exists
-            if (issueBody.includes('## Claude Results')) {
+            if (issueBody.includes('## Execution Summary')) {
               // Check if table exists within results section
-              const resultsMatch = issueBody.match(/## Claude Results[\s\S]*?(?=\n##|\n$|$)/);
+              const resultsMatch = issueBody.match(/## Execution Summary[\s\S]*?(?=\n##|\n$|$)/);
               const resultsSection = resultsMatch ? resultsMatch[0] : '';
               
               if (resultsSection.includes('| Bot | Duration')) {
                 // Remove existing table completely and rebuild it
-                const bodyWithoutResultsSection = issueBody.replace(/## Claude Results[\s\S]*?(?=\n##|\n$|$)/, '').trim();
+                const bodyWithoutResultsSection = issueBody.replace(/## Execution Summary[\s\S]*?(?=\n##|\n$|$)/, '').trim();
                 
                 // Extract existing table rows (excluding header, separator, and total rows)
                 const existingRows = resultsSection.split('\n')
@@ -166,7 +166,7 @@ runs:
                 const allRows = [...filteredExistingRows, newResultEntry];
                 const tableContent = allRows.join('\n') + '\n' + totalEntry;
                 
-                const newResultsSection = `## Claude Results
+                const newResultsSection = `## Execution Summary
 
           | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
           |-----|----------------|--------------|---------------|------|-----------|
@@ -181,13 +181,13 @@ runs:
                 const totalCostInJPY = totalCost * 150;
                 const totalEntry = `| **Total** | ${durationMinutes.toFixed(2)} | ${formattedInputTokens} | ${formattedOutputTokens} | $${totalCost.toFixed(4)} | ¥${totalCostInJPY.toFixed(0)} |`;
                 
-                updatedBody = issueBody.replace('## Claude Results', `## Claude Results${tableHeader}\n${newResultEntry}\n${totalEntry}`);
+                updatedBody = issueBody.replace('## Execution Summary', `## Execution Summary${tableHeader}\n${newResultEntry}\n${totalEntry}`);
               }
             } else {
               // Create new results section at the beginning
               const totalCostInJPY = totalCost * 150;
               const totalEntry = `| **Total** | ${durationMinutes.toFixed(2)} | ${formattedInputTokens} | ${formattedOutputTokens} | $${totalCost.toFixed(4)} | ¥${totalCostInJPY.toFixed(0)} |`;
-              const resultsSection = `## Claude Results
+              const resultsSection = `## Execution Summary
 
           | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
           |-----|----------------|--------------|---------------|------|-----------|
