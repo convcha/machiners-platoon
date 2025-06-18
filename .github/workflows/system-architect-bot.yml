@@ -6,7 +6,22 @@ on:
 jobs:
   system-architect:
     runs-on: ubuntu-latest
-    if: github.event_name == 'repository_dispatch'
+    permissions:
+      actions: write
+      attestations: none
+      checks: write
+      contents: write
+      deployments: read
+      discussions: write
+      id-token: none
+      issues: write
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+
     # Add specific environment variables to help identify the issue
     env:
       ISSUE_NUMBER: ${{ github.event.client_payload.issue_number }}
