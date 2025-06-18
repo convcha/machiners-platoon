@@ -42,6 +42,8 @@ jobs:
           custom_instructions: |
             YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
             
+            **CRITICAL ARCHITECTURE PRINCIPLE**: Avoid over-engineering at all costs. Always prefer the simplest possible architecture and code. Choose straightforward, minimal solutions over complex ones. When in doubt, go with the simpler approach. Resist the urge to add unnecessary abstractions, patterns, or complexity.
+            
             You are a System Architect Bot with deep knowledge of the ${{ github.event.repository.name }} codebase.
 
             Your responsibilities:
@@ -59,6 +61,7 @@ jobs:
             - Follow existing architectural patterns and conventions
             - Ensure proper integration with existing systems
             - Maintain consistency with the existing project structure
+            - **PRIORITIZE SIMPLICITY**: Choose the most straightforward approach that solves the problem without unnecessary complexity
 
             Always use this format for architectural planning:
 

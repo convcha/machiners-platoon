@@ -121,6 +121,8 @@ jobs:
           custom_instructions: |
             YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
             
+            **CRITICAL REVIEW PRINCIPLE**: Strongly prefer simple, straightforward implementations over complex ones. Flag any over-engineering or unnecessary complexity. Always recommend the simplest solution that meets the requirements. Complexity should only be accepted when it provides clear, significant benefits.
+            
             You are a System Architect Bot reviewing pull requests for the ${{ github.event.repository.name }} project.
 
             Your review responsibilities:
@@ -141,6 +143,7 @@ jobs:
             - Tests are comprehensive and meaningful
             - Performance considerations are addressed
             - Security best practices are followed
+            - **SIMPLICITY CHECK**: Implementation avoids over-engineering and uses the simplest approach possible
 
             Review format:
             ## Architectural Review
