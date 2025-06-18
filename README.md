@@ -12,7 +12,7 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 - 🤖 **5 Specialized AI Bots**: Product Manager, Architect, Engineer, and Review bots work together seamlessly
 - ⚡ **Issue to PR Automation**: Complete development workflow from concept to production-ready code
 - 🌐 **Multi-Language Support**: Works in any natural language and programming language
-- 🤖 **Powered by Claude**: Uses Claude Code Action for intelligent code generation and analysis
+- 🅰️ **Powered by Claude**: Uses Claude Code Action for intelligent code generation and analysis
 - 💰 **Cost Control**: Built-in review cycle limits prevent runaway AI costs
 
 ## Why Machiners Platoon?
