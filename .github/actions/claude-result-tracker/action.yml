@@ -155,11 +155,11 @@ runs:
             
             const newResultsSection = `## Execution Summary
 
-         | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
-         |-----|----------------|--------------|---------------|------|-----------|
-         ${tableContent}
+          | Bot | Duration (min) | Input Tokens | Output Tokens | Cost | Cost (JPY) |
+          |-----|----------------|--------------|---------------|------|-----------|
+          ${tableContent}
 
-         `;
+          `;
             
             let updatedBody;
             
