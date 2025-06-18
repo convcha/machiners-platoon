@@ -8,13 +8,23 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 
 ## Features
 
-- ⚡ **Automated Development Workflow**: Complete automation from issue to PR
-- 📝 **Flexible Issue Creation**: Issue titles and descriptions can be rough - bots will enhance and complete them automatically
-- 🤖 **Multi-Agent Collaboration**: 5 specialized bots handle different aspects of development
-- 🌐 **Multi-Language Support**: Bots communicate in any language you prefer
+- 📝 **Flexible Issue Creation**: Write rough ideas - AI bots will enhance and complete requirements automatically
+- 🤖 **5 Specialized AI Bots**: Product Manager, Architect, Engineer, and Review bots work together seamlessly
+- ⚡ **Issue to PR Automation**: Complete development workflow from concept to production-ready code
+- 🌐 **Multi-Language Support**: Works in any natural language and programming language
 - 💰 **Cost Control**: Built-in cycle limits prevent runaway AI costs
-- 🔧 **Language Agnostic**: Easily adaptable to any programming language or framework
-- 🔒 **Security First**: Human oversight required for final approval and merge
+- 🔒 **Human Oversight**: Bots cannot merge - final approval always requires human review
+
+## Why Machiners Platoon?
+
+Machiners Platoon is built **entirely with GitHub Actions** - no external infrastructure required:
+
+- 🚫 **No servers needed** - Runs entirely on GitHub's infrastructure
+- 🚫 **No third-party services** - No subscriptions or external dependencies
+- 🚫 **No agent frameworks** - Unlike [Mastra](https://github.com/mastra-ai/mastra) or [VoltAgent](https://github.com/VoltAgent/voltagent), no complex frameworks to learn
+- ✅ **Just GitHub Actions** - Simple YAML files you can customize anytime
+
+Everything runs in your GitHub repository. Want to customize the behavior? Just edit the YAML files.
 
 ## Demo (Japanese)
 
