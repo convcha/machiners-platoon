@@ -1,6 +1,6 @@
 # 🤖 Machiners Platoon
 
-An automated development agent squadron powered by GitHub Actions that transforms issues into production-ready pull requests.
+An automated development agent squadron powered by [Claude Code Action](https://github.com/anthropics/claude-code-action) that transforms issues into production-ready pull requests.
 
 ## Overview
 
@@ -12,8 +12,8 @@ Machiners Platoon is a collection of 5 specialized AI bots that work together to
 - 🤖 **5 Specialized AI Bots**: Product Manager, Architect, Engineer, and Review bots work together seamlessly
 - ⚡ **Issue to PR Automation**: Complete development workflow from concept to production-ready code
 - 🌐 **Multi-Language Support**: Works in any natural language and programming language
-- 💰 **Cost Control**: Built-in cycle limits prevent runaway AI costs
-- 🔒 **Human Oversight**: Bots cannot merge - final approval always requires human review
+- 🤖 **Powered by Claude**: Uses Claude Code Action for intelligent code generation and analysis
+- 💰 **Cost Control**: Built-in review cycle limits prevent runaway AI costs
 
 ## Why Machiners Platoon?
 
@@ -177,7 +177,7 @@ graph TD
 
 - **Cycle Limits**: Maximum 3 review iterations to control costs
 - **Smart Routing**: Intelligent decisions to avoid unnecessary operations
-- **Execution Tracking**: Detailed cost and duration tracking for all operations
+- **Execution Tracking**: Detailed cost and duration tracking displayed in issues
 - **Automatic Stopping**: Prevents infinite loops and runaway costs
 
 ## Security

@@ -97,7 +97,7 @@ jobs:
             7. **IMPORTANT: After implementation is complete, run validation (e.g. lint, format and typecheck) to ensure quality standards are met**
             8. Create a pull request using mcp__github__create_pull_request with a detailed description of the implementation that includes an "## Issues" section at the very top of the PR body with a link to the corresponding issue
             9. Add '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label to the PR
-            10. **IMPORTANT: After creating the PR, update the corresponding issue by adding a "## Pull Requests" section at the very top of the issue body with a link to the created PR using mcp__github__update_issue**
+            10. **IMPORTANT: After creating the PR, update the corresponding issue by adding a "## Pull Requests" section at the very top of the issue body with a link to the created PR using mcp__github__update_issue. CRITICAL: When updating the issue, you MUST preserve any existing "## Claude Results" section that contains cost tracking information. Read the current issue body first, preserve the Claude Results section if it exists, and include it at the end of the updated issue body.**
             11. **CRITICAL**: NEVER remove the '${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}' label from Issues or PRs. This label must always be preserved.
 
             Make sure to read the architectural plan and requirements carefully before starting implementation.

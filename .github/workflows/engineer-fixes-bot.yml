@@ -172,7 +172,7 @@ jobs:
         uses: ./.github/actions/claude-result-tracker
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ env.PR_NUMBER }}
+          issue-number: ${{ env.ISSUE_NUMBER }}
           cost-name: "Engineer Fixes Bot"
 
       # Trigger the Architect Review Bot for re-review after fixes

@@ -39,6 +39,7 @@ Machiners Platoon is a GitHub Actions-powered automated development agent squadr
 - Maximum 3 automated review cycles to prevent infinite loops and control AI costs
 - Each bot execution is tracked with cost, duration, and token usage via the `claude-result-tracker` action
 - Cost information is automatically added to issues in a standardized table format
+- **IMPORTANT**: All bots must preserve the "## Claude Results" section when updating issue bodies to maintain cost tracking history
 
 ## Language Support
 - All bots support multiple languages through the `MACHINERS_PLATOON_LANG` GitHub Actions variable
