@@ -121,6 +121,7 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 |----|:---:|----|----|
 | `MACHINERS_PLATOON_LANG` | ❌ | Target language for bot communications. Supports any natural language name (e.g., "Japanese", "日本語", "Spanish", "Español", "Français") | "English" |
 | `MACHINERS_PLATOON_TRIGGER_LABEL` | ❌ | Custom trigger label for activating the bot squadron. Allows using different labels for different projects or environments | "🤖 Machiners Platoon" |
+| `MACHINERS_PLATOON_BASE_BRANCH_PREFIX` | ❌ | Enable base branch specification via issue labels. When set (e.g., `base-branch:`), issues must have a label like `base-branch:develop` to specify which branch to use as the base | N/A (uses default branch) |
 
 ![](./docs/images/lang.png)
 
@@ -195,6 +196,7 @@ graph TD
 - `🤖 Architect Approved` - PR ready for human review
 - `🚨 Manual Review Required` - Human intervention needed
 - `🤖 Max Cycles Reached` - Automation stopped due to limits
+- Base Branch Labels (when `MACHINERS_PLATOON_BASE_BRANCH_PREFIX` is configured) - Specifies which branch to use as base (e.g., `base-branch:develop`, `base-branch:release/1.0`)
 
 ## Documentation
 

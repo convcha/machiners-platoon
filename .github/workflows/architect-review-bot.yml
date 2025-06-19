@@ -36,6 +36,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Validate base branch (informational only for PRs)
+      - name: Validate base branch for PR
+        if: env.ISSUE_NUMBER != ''
+        id: validate-base-branch
+        uses: ./.github/actions/validate-base-branch
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.ISSUE_NUMBER }}
+          prefix-variable: ${{ vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX }}
+
       # Check current review cycle count to prevent infinite loops
       - name: Check review cycle limit
         id: check_cycle_limit

@@ -1,0 +1,124 @@
+name: 'Validate Base Branch'
+description: 'Validates and retrieves base branch from issue labels when MACHINERS_PLATOON_BASE_BRANCH_PREFIX is set'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: true
+  issue-number:
+    description: 'Issue number to check labels'
+    required: true
+  prefix-variable:
+    description: 'Base branch prefix variable value'
+    required: false
+    default: ''
+outputs:
+  base-branch:
+    description: 'The base branch to use'
+    value: ${{ steps.get-base-branch.outputs.base-branch }}
+  should-continue:
+    description: 'Whether the workflow should continue'
+    value: ${{ steps.get-base-branch.outputs.should-continue }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Get base branch from labels
+      id: get-base-branch
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const issueNumber = '${{ inputs.issue-number }}';
+          const prefix = '${{ inputs.prefix-variable }}';
+          
+          // If no prefix is configured, use default branch
+          if (!prefix) {
+            const { data: repo } = await github.rest.repos.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+            console.log(`No base branch prefix configured. Using default branch: ${repo.default_branch}`);
+            core.setOutput('base-branch', repo.default_branch);
+            core.setOutput('should-continue', 'true');
+            return;
+          }
+          
+          // Get issue labels
+          const { data: issue } = await github.rest.issues.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: parseInt(issueNumber)
+          });
+          
+          // Look for label with the prefix
+          const baseBranchLabel = issue.labels.find(label => 
+            label.name.startsWith(prefix)
+          );
+          
+          if (!baseBranchLabel) {
+            // Error: prefix is configured but no matching label found
+            const errorMessage = `🚨 **Base Branch Label Missing**\n\n` +
+              `The \`MACHINERS_PLATOON_BASE_BRANCH_PREFIX\` is configured as \`${prefix}\`, ` +
+              `but no label starting with \`${prefix}\` was found on this issue.\n\n` +
+              `**Required Action:**\n` +
+              `Please add a label like \`${prefix}main\`, \`${prefix}develop\`, or \`${prefix}feature/branch-name\` ` +
+              `to specify which branch the bots should use as the base.\n\n` +
+              `**Example labels:**\n` +
+              `- \`${prefix}main\`\n` +
+              `- \`${prefix}develop\`\n` +
+              `- \`${prefix}release/1.0\``;
+            
+            // Add error comment to issue
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: errorMessage
+            });
+            
+            console.log('ERROR: Base branch prefix configured but no matching label found');
+            core.setOutput('should-continue', 'false');
+            core.setFailed('Base branch label is required but not found');
+            return;
+          }
+          
+          // Extract branch name from label
+          const branchName = baseBranchLabel.name.substring(prefix.length);
+          
+          // Verify branch exists
+          try {
+            await github.rest.repos.getBranch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: branchName
+            });
+            
+            console.log(`Using base branch from label: ${branchName}`);
+            core.setOutput('base-branch', branchName);
+            core.setOutput('should-continue', 'true');
+          } catch (error) {
+            // Branch doesn't exist
+            const errorMessage = `🚨 **Base Branch Not Found**\n\n` +
+              `The label \`${baseBranchLabel.name}\` specifies branch \`${branchName}\`, ` +
+              `but this branch does not exist in the repository.\n\n` +
+              `**Available branches:**\n`;
+            
+            // List available branches
+            const { data: branches } = await github.rest.repos.listBranches({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100
+            });
+            
+            const branchList = branches.map(b => `- \`${b.name}\``).join('\n');
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: errorMessage + branchList
+            });
+            
+            console.log(`ERROR: Branch ${branchName} does not exist`);
+            core.setOutput('should-continue', 'false');
+            core.setFailed(`Branch ${branchName} does not exist`);
+          }

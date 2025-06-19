@@ -31,6 +31,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Validate and get base branch
+      - name: Validate base branch
+        id: validate-base-branch
+        uses: ./.github/actions/validate-base-branch
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.ISSUE_NUMBER }}
+          prefix-variable: ${{ vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX }}
+
+      # Stop workflow if base branch validation failed
+      - name: Stop if base branch validation failed
+        if: steps.validate-base-branch.outputs.should-continue == 'false'
+        run: |
+          echo "Base branch validation failed. Stopping workflow."
+          exit 1
+
+      # Checkout the base branch if different from default
+      - name: Checkout base branch
+        if: steps.validate-base-branch.outputs.base-branch != ''
+        run: |
+          git fetch origin ${{ steps.validate-base-branch.outputs.base-branch }}
+          git checkout ${{ steps.validate-base-branch.outputs.base-branch }}
+
       # <!-- INSERT SETUP STEPS HERE -->
 
       - uses: convcha/claude-code-action@main
@@ -73,7 +96,7 @@ jobs:
             3. Plan the implementation approach
 
             Implementation process:
-            1. Create a new branch: `git checkout -b feature/issue-{issue-number}`
+            1. Create a new branch from the base branch: `git checkout -b feature/issue-{issue-number}` (base branch: ${{ steps.validate-base-branch.outputs.base-branch }})
             2. Implement the feature step by step
             3. Test the implementation
             4. Run your validation command (e.g. lint, format and typecheck) to ensure format and lint pass

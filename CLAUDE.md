@@ -49,6 +49,26 @@ Machiners Platoon is a GitHub Actions-powered automated development agent squadr
 - Internal bot instructions remain in English for consistency
 - Markdown section names are also translated to the target language
 
+## Base Branch Configuration
+- Bots can use a specific git branch as the base for new feature branches through issue labels
+- Enable by setting the `MACHINERS_PLATOON_BASE_BRANCH_PREFIX` GitHub Actions variable
+- Set as repository variable in **Settings → Secrets and variables → Actions → Variables**
+- When enabled, issues must have a label starting with the configured prefix to specify the base branch
+
+### How it works:
+1. Set `MACHINERS_PLATOON_BASE_BRANCH_PREFIX` to a value like `base-branch:`
+2. Add a label to the issue with the format: `{prefix}{branch-name}`
+   - Example: `base-branch:develop`
+   - Example: `base-branch:feature/v2`
+   - Example: `base-branch:release/1.0`
+3. All bots will use the specified branch as the base for operations
+
+### Important notes:
+- If the prefix is configured but no matching label exists on the issue, workflows will fail with an error
+- The specified branch must exist in the repository
+- If no prefix is configured, bots will use the repository's default branch (usually `main` or `master`)
+- This ensures all work for an issue is based on the correct branch (useful for feature branches, release branches, etc.)
+
 ## Common Operations
 
 ### Adding New Bots

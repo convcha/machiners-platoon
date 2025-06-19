@@ -99,6 +99,16 @@ jobs:
           # Checkout the PR branch for fixes
           ref: ${{ github.event.pull_request.head.ref || github.event.issue.pull_request.head.ref }}
 
+      # Validate base branch (informational only for PRs)
+      - name: Validate base branch for PR
+        if: steps.check_cycle_limit.outputs.should_continue == 'true' && env.ISSUE_NUMBER != ''
+        id: validate-base-branch
+        uses: ./.github/actions/validate-base-branch
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ env.ISSUE_NUMBER }}
+          prefix-variable: ${{ vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX }}
+
       # <!-- INSERT SETUP STEPS HERE -->
 
       - uses: convcha/claude-code-action@main
