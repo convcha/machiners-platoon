@@ -24,8 +24,7 @@ jobs:
     # Only trigger for issues with specific labels and from repository owners
     if: |
       github.event.action == 'labeled' && 
-      github.event.label.name == (vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon') &&
-      github.event.issue.user.login == github.repository_owner
+      github.event.label.name == (vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
