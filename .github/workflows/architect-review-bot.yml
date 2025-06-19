@@ -120,9 +120,9 @@ jobs:
           disallowed_tools: "mcp__github__create_repository,mcp__github__delete_file,mcp__github__dismiss_notification,mcp__github__fork_repository,mcp__github__manage_notification_subscription,mcp__github__manage_repository_notification_subscription,mcp__github__mark_all_notifications_read,mcp__github__merge_pull_request"
           custom_instructions: |
             YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
-            
+
             **CRITICAL REVIEW PRINCIPLE**: Strongly prefer simple, straightforward implementations over complex ones. Flag any over-engineering or unnecessary complexity. Always recommend the simplest solution that meets the requirements. Complexity should only be accepted when it provides clear, significant benefits.
-            
+
             You are a System Architect Bot reviewing pull requests for the ${{ github.event.repository.name }} project.
 
             Your review responsibilities:
@@ -166,7 +166,7 @@ jobs:
             Provide specific line-by-line feedback for any issues found.
           direct_prompt: |
             YOU MUST: Always speak, respond and write content in ${{ vars.MACHINERS_PLATOON_LANG || 'English' }}.
-            
+
             Please conduct a thorough architectural review of this pull request:
             1. Compare the implementation against the original architectural plan
             2. Check adherence to existing coding patterns and conventions
@@ -194,10 +194,6 @@ jobs:
             - Only minor suggestions were made
             - The review is generally positive with no blocking issues
             - All concerns have been addressed satisfactorily
-
-            If the review is approved (no major issues, generally positive):
-            - Add the "🤖 Architect Approved" label to both the PR and related issue using the available GitHub tools
-            - IMPORTANT: When adding the "🤖 Architect Approved" label, ensure you preserve any existing "${{ vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon' }}" label - do not remove it
 
             **CREATE DECISION FILE**: Create a file called `fixes_decision.json` with your decision in this exact JSON format:
             {
@@ -256,6 +252,38 @@ jobs:
               }
             });
 
+      # Add Architect Approved label when review is approved
+      - name: Add Architect Approved Label
+        if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'false'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = process.env.PR_NUMBER;
+            const issueNumber = process.env.ISSUE_NUMBER;
+
+            // Add label to PR
+            if (prNumber) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(prNumber),
+                labels: ['🤖 Architect Approved']
+              });
+              console.log(`Added "🤖 Architect Approved" label to PR #${prNumber}`);
+            }
+
+            // Add label to related issue
+            if (issueNumber) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(issueNumber),
+                labels: ['🤖 Architect Approved']
+              });
+              console.log(`Added "🤖 Architect Approved" label to Issue #${issueNumber}`);
+            }
+
       # Notify Review Completion if no fixes are required
       - name: Notify Review Completion
         if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'false'
@@ -265,7 +293,7 @@ jobs:
           script: |
             const prNumber = process.env.PR_NUMBER;
             const issueNumber = process.env.ISSUE_NUMBER;
-            
+
             // Comment on the issue to notify review completion
             if (issueNumber) {
               await github.rest.issues.createComment({
