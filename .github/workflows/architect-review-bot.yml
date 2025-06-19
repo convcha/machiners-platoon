@@ -261,7 +261,7 @@ jobs:
         if: success() && steps.check_cycle_limit.outputs.should_continue == 'true' && steps.parse_fixes_decision.outputs.needs_fixes == 'false'
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const prNumber = process.env.PR_NUMBER;
             const issueNumber = process.env.ISSUE_NUMBER;
