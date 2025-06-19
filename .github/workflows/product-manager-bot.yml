@@ -24,7 +24,8 @@ jobs:
     # Only trigger for issues with specific labels and from repository owners
     if: |
       github.event.action == 'labeled' && 
-      github.event.label.name == (vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon')
+      (github.event.label.name == (vars.MACHINERS_PLATOON_TRIGGER_LABEL || '🤖 Machiners Platoon') ||
+       (vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX != '' && startsWith(github.event.label.name, vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX)))
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
