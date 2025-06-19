@@ -49,12 +49,34 @@ runs:
             issue_number: parseInt(issueNumber)
           });
           
-          // Look for label with the prefix
-          const baseBranchLabel = issue.labels.find(label => 
+          // Look for all labels with the prefix
+          const baseBranchLabels = issue.labels.filter(label => 
             label.name.startsWith(prefix)
           );
           
-          if (!baseBranchLabel) {
+          // Check for multiple matching labels
+          if (baseBranchLabels.length > 1) {
+            const errorMessage = `🚨 **Multiple Base Branch Labels Found**\n\n` +
+              `Found ${baseBranchLabels.length} labels starting with \`${prefix}\`:\n` +
+              baseBranchLabels.map(label => `- \`${label.name}\``).join('\n') + '\n\n' +
+              `**Required Action:**\n` +
+              `Please keep only ONE base branch label. Remove the extra labels to specify which branch the bots should use as the base.`;
+            
+            // Add error comment to issue
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: errorMessage
+            });
+            
+            console.log('ERROR: Multiple base branch labels found');
+            core.setOutput('should-continue', 'false');
+            core.setFailed('Multiple base branch labels found. Only one is allowed.');
+            return;
+          }
+          
+          if (baseBranchLabels.length === 0) {
             // Error: prefix is configured but no matching label found
             const errorMessage = `🚨 **Base Branch Label Missing**\n\n` +
               `The \`MACHINERS_PLATOON_BASE_BRANCH_PREFIX\` is configured as \`${prefix}\`, ` +
@@ -81,7 +103,8 @@ runs:
             return;
           }
           
-          // Extract branch name from label
+          // Extract branch name from label (using first element since we now have an array)
+          const baseBranchLabel = baseBranchLabels[0];
           const branchName = baseBranchLabel.name.substring(prefix.length);
           
           // Verify branch exists
