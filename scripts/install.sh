@@ -11,6 +11,7 @@ echo "> Installing Machiners Platoon..."
 echo "> Creating directories..."
 mkdir -p .github/workflows
 mkdir -p .github/actions/claude-result-tracker
+mkdir -p .github/actions/validate-base-branch
 
 # Download workflow files
 echo "> Downloading workflow files..."
@@ -23,5 +24,6 @@ curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/.github
 # Download custom action files
 echo "> Downloading custom action files..."
 curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/.github/actions/claude-result-tracker/action.yml -o .github/actions/claude-result-tracker/action.yml
+curl -s https://raw.githubusercontent.com/convcha/machiners-platoon/main/.github/actions/validate-base-branch/action.yml -o .github/actions/validate-base-branch/action.yml
 
 echo "> Installation complete!"
