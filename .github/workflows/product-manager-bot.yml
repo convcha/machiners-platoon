@@ -32,6 +32,22 @@ jobs:
           fetch-depth: 0 # Fetch full history for better context
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Validate base branch
+      - name: Validate base branch
+        id: validate-base-branch
+        uses: ./.github/actions/validate-base-branch
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          prefix-variable: ${{ vars.MACHINERS_PLATOON_BASE_BRANCH_PREFIX }}
+
+      # Stop workflow if base branch validation failed
+      - name: Stop if base branch validation failed
+        if: steps.validate-base-branch.outputs.should-continue == 'false'
+        run: |
+          echo "Base branch validation failed. Stopping workflow."
+          exit 1
+
       - uses: convcha/claude-code-action@main
         env:
           NODE_VERSION: "lts/*"
