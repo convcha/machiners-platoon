@@ -190,7 +190,7 @@ jobs:
           script: |
             const prNumber = process.env.PR_NUMBER;
             console.log('Triggering architect re-review for PR:', prNumber);
-            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
+            const accumulatedSummary = String.raw`${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,

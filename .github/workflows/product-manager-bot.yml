@@ -158,8 +158,9 @@ jobs:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           script: |
             console.log('Issue number:', context.issue.number);
-            console.log('Reason for architecture review:', `${{ steps.parse_decision.outputs.reason }}`);
-            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
+            const reason = String.raw`${{ steps.parse_decision.outputs.reason }}`;
+            console.log('Reason for architecture review:', reason);
+            const accumulatedSummary = String.raw`${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -179,8 +180,9 @@ jobs:
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
           script: |
             console.log('Issue number:', context.issue.number);
-            console.log('Reason for direct implementation:', `${{ steps.parse_decision.outputs.reason }}`);
-            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
+            const reason = String.raw`${{ steps.parse_decision.outputs.reason }}`;
+            console.log('Reason for direct implementation:', reason);
+            const accumulatedSummary = String.raw`${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,

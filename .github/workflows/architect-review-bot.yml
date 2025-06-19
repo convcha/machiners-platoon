@@ -241,8 +241,9 @@ jobs:
           script: |
             const prNumber = process.env.PR_NUMBER;
             console.log('PR number:', prNumber);
-            console.log('Reason for triggering:', `${{ steps.parse_fixes_decision.outputs.reason }}`);
-            const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
+            const reason = String.raw`${{ steps.parse_fixes_decision.outputs.reason }}`;
+            console.log('Reason for triggering:', reason);
+            const accumulatedSummary = String.raw`${{ steps.track-cost.outputs.accumulated-summary }}`;
             github.rest.repos.createDispatchEvent({
               owner: context.repo.owner,
               repo: context.repo.repo,

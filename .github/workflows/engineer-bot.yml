@@ -139,7 +139,7 @@ jobs:
             if (prs.length > 0) {
               const prNumber = prs[0].number;
               console.log('Triggering architect review for PR:', prNumber);
-              const accumulatedSummary = `${{ steps.track-cost.outputs.accumulated-summary }}`;
+              const accumulatedSummary = String.raw`${{ steps.track-cost.outputs.accumulated-summary }}`;
               
               github.rest.repos.createDispatchEvent({
                 owner: context.repo.owner,
