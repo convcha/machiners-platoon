@@ -37,13 +37,13 @@ https://github.com/convcha/rust-wc/issues/5
 Run in your repository's root directory with [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
-claude "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project"
+claude "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project. You should ultrathink!"
 ```
 
 For busy developers (skip permission prompts - use at your own risk):
 
 ```bash
-claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project"
+claude --dangerously-skip-permissions "https://github.com/convcha/machiners-platoon Read this GitHub repository's README and follow the Manual Installation section to install these GitHub Actions into my project. You should ultrathink!"
 ```
 
 **Note**: After automated installation, you'll still need to manually configure repository settings and secrets as described in the [Configuration](#configuration) section.
@@ -130,13 +130,13 @@ Add in **Settings → Secrets and variables → Actions → Variables**:
 When this repository receives updates, you can easily apply the updates to your repository using [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) or other coding agents:
 
 ```bash
-claude "Properly compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps"
+claude "Properly compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps. You should ultrathink!"
 ```
 
 For busy developers (skip permission prompts - use at your own risk):
 
 ```bash
-claude --dangerously-skip-permissions "Properly compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps"
+claude --dangerously-skip-permissions "Properly compare my current GitHub Actions in .github/workflows/ and .github/actions/ with the latest version from https://github.com/convcha/machiners-platoon and update them while preserving my language-specific setup steps. You should ultrathink!"
 ```
 
 ## Bot Squadron
